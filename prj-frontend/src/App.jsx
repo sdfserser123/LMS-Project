@@ -12,7 +12,7 @@ function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<LoginPage />} />
-          <Route path="/home" element={<AdminDashboard/>} />
+          <Route path="/home" element={<TestPage/>} />
         </Routes>
       </BrowserRouter>
     </>

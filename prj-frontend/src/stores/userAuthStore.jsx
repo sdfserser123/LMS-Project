@@ -5,10 +5,14 @@ import { authService } from "../service/authService"
 /**
  * @type {import('../type/store').AuthState}
  */
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
   accessToken: null,
   user: null,
   loading: false,
+
+  clearState: () => {
+    set({accessToken: null, user: null, loading: false})
+  },
 
   logIn: async (username, password) => {
     try {
@@ -35,10 +39,13 @@ export const useAuthStore = create((set) => ({
   },
 
   logOut: () => {
-    set({
-      accessToken: null,
-      user: null,
-    })
+    try {
+      get().clearState();
+      authService.logOut();
+    } catch (error) {
+      console.log(error);
+      toast.error("Lỗi xảy ra khi Đăng xuất, hãy thử lại")
+    }
   },
 }))
 

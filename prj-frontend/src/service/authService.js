@@ -11,4 +11,14 @@ export const authService = {
 
     return res.data;
   },
+
+    logOut: async () => {
+    const res = await api.post(
+      "/auth/logout",
+      null,
+      { withCredentials: true }
+    );
+
+    return res.data;
+  }
 };

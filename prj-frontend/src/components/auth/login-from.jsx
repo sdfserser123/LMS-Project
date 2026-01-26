@@ -26,7 +26,7 @@ export const LoginForm = () => {
     try {
       const { username, password} = data;
       await logIn(username, password);
-      navigate('/home')
+      navigate('/')
     } catch (err) {
         
     }

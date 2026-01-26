@@ -4,7 +4,7 @@ const User = require('../modules/User.js');
 const Session = require('../modules/Session.js')
 const crypto = require('crypto');
 
-const ACCESS_TOKEN_TTL = '30m';
+const ACCESS_TOKEN_TTL = '2h';
 const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000;
 
 const logIn = async (req, res) => {
@@ -77,6 +77,43 @@ const logOut = async (req, res) => {
         console.error("Logout error:", error);
         return res.status(500).json({ message: "Lỗi khi gọi LogOut" });
     }
-};
 
-module.exports = { logIn, logOut };
+};
+//tạo access token mới từ refresh token
+const refreshToken = async (req, res) => {
+    try {
+        
+        //lấy refreshToken từ cookie
+        const token = req.cookies?.refreshToken;
+        if(!token){
+            return res.status(401).json({message: 'Token không tồn tại'})
+        }
+
+        //so với refresh token trong db
+        const session = await Session.findByToken(token);
+
+        if(!session){
+            return res.status(403).json({message: 'Token không hợp lệ'})
+        }
+
+        //kiểm tra hạn của token
+        if(session.expires_at < new Date()){
+            return res.status(403).json({message: 'Token đã hết hạn'})
+        }
+
+        
+        //tạo access token mới
+        const accessToken = jwt.sign({
+            userid: session.user_id
+        }, process.env.ACCESS_TOKEN_SECRET, {expiresIn: ACCESS_TOKEN_TTL})
+
+        //return token
+        return res.status(200).json({ accessToken })
+
+    } catch (error) {
+        console.error("Lỗi khi gọi refreshToken", error)
+        return res.status(500).json({message: 'Lỗi hệ thống'})
+    }
+}
+
+module.exports = { logIn, logOut, refreshToken };

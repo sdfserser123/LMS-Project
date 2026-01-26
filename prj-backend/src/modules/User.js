@@ -1,4 +1,6 @@
 const db = require('../libs/db.js')
+const bcrypt = require('bcrypt')
+const generateUserId = require('../controllers/generateUserId.js')
 
 const User = {
     findByUsername: async (username) => {
@@ -13,9 +15,11 @@ const User = {
         console.log(rows)
         return rows[0];
     },
-    addUser: async ({ userid, fullname, username, email, password, role}) => {
+    addUser: async ({ fullname, username, email, password, role}) => {
+       const hashPassword = await bcrypt.hash(password, 10);
+       const userid = await generateUserId(role)
        const [result] = await db.execute(`INSERT INTO users (userid, fullname, username, email, password, role)
-       VALUES (?, ?, ?, ?, ?, ?)`, [userid, fullname, username, email, password, role]);
+       VALUES (?, ?, ?, ?, ?, ?)`, [userid, fullname, username, email, hashPassword, role]);
        return result.insertId
     }
 

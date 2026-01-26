@@ -10,6 +10,9 @@
  * @property {boolean} loading
  * @property {(username: string, password: string) => Promise<void>} logIn
  * @property {() => Promise<void>} logOut
+ * @property {() => Promise<void>} fetchMe
+ * @property {() => Promise<void>} refresh
+ * @property {(username: string, password: string) => void} setAccessToken
  */
 
 export {};

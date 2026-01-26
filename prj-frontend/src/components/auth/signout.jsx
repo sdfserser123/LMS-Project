@@ -12,7 +12,7 @@ const SignOut = () => {
     try {
       await logOut();
       toast.success("Đăng xuất thành công!");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error(error);
       toast.error("Đăng xuất thất bại, vui lòng thử lại");

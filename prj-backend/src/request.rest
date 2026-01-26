@@ -1,0 +1,24 @@
+GET http://localhost:5001/user
+
+###
+
+GET http://localhost:5001/hashPassword
+
+###
+
+GET http://localhost:5001/api/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOjExMDExMDExMDEsImlhdCI6MTc2OTQyMjUwMywiZXhwIjoxNzY5NDI0MzAzfQ.nCTvU271MpX-SONvML6mNpn58Ha5xiA6vXzAd-tqqXE
+
+###
+
+POST http://localhost:5001/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+###
+
+POST http://localhost:5001/api/auth/logout

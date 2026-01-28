@@ -26,10 +26,11 @@ export const useAuthStore = create((set, get) => ({
 
       get().setAccessToken(accessToken)
 
-      await get().fetchMe();
+      const user = await get().fetchMe();
 
-
+      console.log(user);
       toast.success("Đăng nhập thành công 🎉!")
+      return user;
     } catch (error) {
       set({ loading: false })
 
@@ -59,7 +60,7 @@ export const useAuthStore = create((set, get) => ({
       const user = await authService.fetchMe();
 
       set({user});
-
+      return user;
     } catch (error) {
       console.error(error)
       set({user: null, accessToken: null});

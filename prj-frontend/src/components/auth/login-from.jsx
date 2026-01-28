@@ -24,11 +24,25 @@ export const LoginForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      const { username, password} = data;
-      await logIn(username, password);
-      navigate('/')
+      const { username, password } = data;
+
+      const user = await logIn(username, password);
+
+      switch (user.role) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "instructor":
+          navigate("/instructor");
+          break;
+        case "student":
+          navigate("/student");
+          break;
+        default:
+          navigate("/");
+      }
     } catch (err) {
-        
+      console.error(err);
     }
   };
 

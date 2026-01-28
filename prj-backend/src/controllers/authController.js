@@ -28,7 +28,7 @@ const logIn = async (req, res) => {
             return res.status(401).json("Password sai!");
         }
 
-        const accessToken = jwt.sign({userid: user.userid}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: ACCESS_TOKEN_TTL})
+        const accessToken = jwt.sign({userid: user.userid, role: user.role}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: ACCESS_TOKEN_TTL})
 
         const refreshToken = crypto.randomBytes(64).toString("hex")
 

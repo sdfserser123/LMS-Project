@@ -27,7 +27,12 @@ api.interceptors.response.use((res) => res, async (error) => {
 
     originalRequest._retryCount = originalRequest._retryCount || 0;
 
-    if(error.response?.status === 403 && originalRequest._retryCount < 4) {
+    if (error.response?.status === 403) {
+      window.location.href = "/unauthorized";
+      return Promise.reject(error);
+    }
+
+    if(error.response?.status === 401 && originalRequest._retryCount < 4) {
         originalRequest._retryCount += 1;
         console.log("refresh", originalRequest._retryCount);
         try {

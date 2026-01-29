@@ -13,15 +13,15 @@ const app = express()
 const PORT = 5001
 
 app.use((req, res, next) => {
-  console.log(`[${req.method}] ${req.originalUrl}`);
-  next();
+    console.log(`[${req.method}] ${req.originalUrl}`);
+    next();
 });
 
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true,
+    origin: process.env.CLIENT_URL,
+    credentials: true,
 }))
 
 //public routes
@@ -43,14 +43,14 @@ app.get('/user', async (req, res) => {
     }
 });
 
-app.get('/hashPassword', async (req,res) => {
+app.get('/hashPassword', async (req, res) => {
     try {
-        bcrypt.hash("Thai1234@", 10).then(console.log)
+        bcrypt.hash("123456", 10).then(console.log)
     } catch (err) {
         res.status(500).send()
     }
 })
 
 app.listen(PORT, () => {
-        console.log(`Server bắt đầu trên cổng ${PORT}`)
-    });
+    console.log(`Server bắt đầu trên cổng ${PORT}`)
+});

@@ -7,7 +7,7 @@ GET http://localhost:5001/hashPassword
 ###
 
 GET http://localhost:5001/api/users/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiIxMTAxMTAxMTAxIiwiaWF0IjoxNzY5NDM5OTQ0LCJleHAiOjE3Njk0NDE3NDR9.ZmCaxQiUmnEUYomL42N6ofOmgGwg0m1Jvi9Uns3uQoA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyaWQiOiJVMDAxIiwiaWF0IjoxNzY5NDk1ODM4LCJleHAiOjE3Njk1MDMwMzh9.qAytUdklMXZYIjtX9mL-mT3hP00Dp6Nl8grdQicCyWo
 
 ###
 

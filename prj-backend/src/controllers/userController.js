@@ -1,15 +1,16 @@
 const User = require('../modules/User')
+const ActivityLog = require('../modules/ActivityLog')
 
 const authMe = async (req, res) => {
-    try {
-        const user = req.user;
+  try {
+    const user = req.user;
 
-        return res.status(200).json({user})
-        
-    } catch (error) {
-        console.error('Lỗi khi gọi AuthMe', error)
-        return res.status(500).json({message: 'Lỗi hệ thống'})
-    }
+    return res.status(200).json({ user })
+
+  } catch (error) {
+    console.error('Lỗi khi gọi AuthMe', error)
+    return res.status(500).json({ message: 'Lỗi hệ thống' })
+  }
 };
 
 // POST /api/users
@@ -38,6 +39,13 @@ const addUser = async (req, res) => {
       role
     })
 
+    await ActivityLog.create({
+      userId: req.user.userid,
+      action: 'CREATE_USER',
+      ip: req.ip,
+      details: { newUser: username, role }
+    });
+
     return res.status(201).json({
       message: 'Tạo user thành công',
       data: result
@@ -48,12 +56,91 @@ const addUser = async (req, res) => {
   }
 }
 
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { fullname, username, email, password, role } = req.body;
+
+    if (!fullname || !username || !email || !role) {
+      return res.status(400).json({ message: 'Thiếu dữ liệu' })
+    }
+
+    const existingUser = await User.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ message: 'Không tìm thấy user' });
+    }
+
+    await User.updateUser(id, { fullname, username, email, password, role });
+
+    await ActivityLog.create({
+      userId: req.user.userid,
+      action: 'UPDATE_USER',
+      ip: req.ip,
+      details: { updatedUserId: id, changes: { fullname, username, email, role } }
+    });
+
+    return res.status(200).json({ message: 'Cập nhật thành công' });
+  } catch (error) {
+    console.error('Lỗi khi updateUser', error);
+    return res.status(500).json({ message: 'Lỗi hệ thống' });
+  }
+}
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const existingUser = await User.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ message: 'Không tìm thấy user' });
+    }
+
+    await User.deleteUser(id);
+
+    await ActivityLog.create({
+      userId: req.user.userid,
+      action: 'DELETE_USER',
+      ip: req.ip,
+      details: { deletedUserId: id }
+    });
+
+    return res.status(200).json({ message: 'Xóa user thành công' });
+
+  } catch (error) {
+    console.error('Lỗi khi deleteUser', error);
+    return res.status(500).json({ message: 'Lỗi hệ thống' });
+  }
+}
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error('Lỗi khi getAllUsers', error);
+    return res.status(500).json({ message: 'Lỗi hệ thống' });
+  }
+}
+
+const getLogs = async (req, res) => {
+  try {
+    const logs = await ActivityLog.getLogs();
+    return res.status(200).json(logs);
+  } catch (error) {
+    console.error('Lỗi khi getLogs', error);
+    return res.status(500).json({ message: 'Lỗi hệ thống' });
+  }
+}
+
 const test = async (req, res) => {
-    return res.sendStatus(204)
+  return res.sendStatus(204)
 }
 
 module.exports = {
   authMe,
   addUser,
+  updateUser,
+  deleteUser,
+  getAllUsers,
+  getLogs,
   test
 }

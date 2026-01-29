@@ -53,8 +53,8 @@ const logIn = async (req, res) => {
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
+            secure: false, // MUST be false for localhost (HTTP)
+            sameSite: 'lax',
             maxAge: REFRESH_TOKEN_TTL,
         })
 
@@ -87,8 +87,8 @@ const logOut = async (req, res) => {
         //Xóa cookie
         res.clearCookie("refreshToken", {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
+            secure: false, // MUST be false for localhost (HTTP)
+            sameSite: 'lax',
         });
 
         console.log("Log out thành công!")

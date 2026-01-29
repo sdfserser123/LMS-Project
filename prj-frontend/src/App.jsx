@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/logInPage";
 import { TestPage } from "./pages/TestPage";
@@ -7,8 +8,17 @@ import { StudentDashboard } from "./pages/student/StudentDashboard";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { Toaster } from "sonner";
 import { RoleRedirect } from "./components/auth/RoleRedirect";
+import { useAuthStore } from "./stores/userAuthStore";
 
 function App() {
+  const { refresh, loading } = useAuthStore();
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    refresh().finally(() => setCheckingAuth(false));
+  }, []);
+
+  if (checkingAuth) return <div>Khởi động ứng dụng...</div>;
   return (
     <>
       <Toaster richColors />

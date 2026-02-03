@@ -109,7 +109,7 @@ export const AdminLayout = () => {
             {/* Main Content Wrapper */}
             <main style={{
                 flex: 1,
-                marginLeft: '80px', // Fixed margin
+                marginLeft: showSidebar ? '260px' : '80px',
                 transition: 'margin-left 0.3s ease',
                 minHeight: '100vh',
                 width: '100%'

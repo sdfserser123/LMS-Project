@@ -31,4 +31,17 @@ const generateUserId = async (role) => {
   return prefix + year + String(nextNumber).padStart(4, '0')
 }
 
-module.exports = generateUserId
+const generateLessonId = async (course_id) => {
+  const [rows] = await db.execute(
+    'SELECT * FROM lessons WHERE course_id = ? ORDER BY created_at DESC', [course_id]
+  )
+  if(rows.length == 0){
+    return course_id + "-1";
+  }
+  else{
+    return course_id + "-" + String(rows.length+1);
+  }
+  
+}
+
+module.exports = {generateUserId , generateLessonId}

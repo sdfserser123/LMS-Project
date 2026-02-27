@@ -3,15 +3,22 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/logInPage";
 import { TestPage } from "./pages/TestPage";
 import AddUserPage from "./pages/admin/AddUserPage";
-import { AdminDashboard } from "./pages/admin/AdminDashboard";
-import { UserManagement } from "./pages/admin/UserManagement";
+import { AdminDashboard } from "./pages/admin/adminDashboard";
 import { CourseManagement } from "./pages/admin/CourseManagement";
+import { UserManagement } from "./pages/admin/UserManagement";
 import { StudentDashboard } from "./pages/student/StudentDashboard";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { Toaster } from "sonner";
 import { RoleRedirect } from "./components/auth/RoleRedirect";
 import { useAuthStore } from "./stores/userAuthStore";
 import { AdminLayout } from "./components/admin/AdminLayout";
+import AddCoursePage from "./pages/admin/AddCoursePage";
+import { TeacherDashboard } from "./pages/teacher/teacherDashboard";
+import { TeacherLayout } from "./components/teacher/TeacherLayour";
+
+// IMPORT CÁC COMPONENT MỚI Ở ĐÂY
+import { CourseLayout } from "./components/courses/CourseLayout";
+import { LessonLayout } from "./components/courses/lessons/LessonLayout";
 
 function App() {
   const { refresh, loading } = useAuthStore();
@@ -22,6 +29,7 @@ function App() {
   }, []);
 
   if (checkingAuth) return <div>Khởi động ứng dụng...</div>;
+
   return (
     <>
       <Toaster richColors />
@@ -39,16 +47,37 @@ function App() {
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/users" element={<UserManagement />} />
               <Route path="/admin/courses" element={<CourseManagement />} />
+              <Route path="/admin/addcourse" element={<AddCoursePage />} />
               <Route path="/adduser" element={<AddUserPage />} />
+              
+              {/* 1. Trang quản lý danh sách bài giảng của 1 khóa học */}
+              <Route path="admin/lessons/:courseid" element={<CourseLayout />} />
             </Route>
           </Route>
 
+          {/* Instructor (Giảng viên) */}
+          <Route element={<ProtectedRoute allowedRoles={["instructor"]} />}>
+            <Route element={<TeacherLayout />}>
+              <Route path="/instructor" element={<TeacherDashboard />} />
+              {/* Thêm Route quản lý khóa học và bài học cho Giảng viên */}
+              <Route path="/instructor/course/:courseid" element={<CourseLayout />} />
+              <Route path="/instructor/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
+              {/* 1. Trang quản lý danh sách bài giảng của 1 khóa học */}
+              <Route path="/instructor/lessons/:courseid" element={<CourseLayout />} />
+            </Route>
+          </Route>
+
+          <Route element={<ProtectedRoute allowedRoles={["instructor","admin"]} />}>
+              <Route path="/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
+          </Route>
           {/* Student */}
           <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
             <Route path="/student" element={<StudentDashboard />} />
           </Route>
 
           <Route path="/unauthorized" element={<h1>403 - Không có quyền</h1>} />
+          {/* Route bắt lỗi 404 để không bị trắng trang hoàn toàn */}
+          <Route path="*" element={<h1>404 - Trang không tồn tại</h1>} />
         </Routes>
       </BrowserRouter>
     </>

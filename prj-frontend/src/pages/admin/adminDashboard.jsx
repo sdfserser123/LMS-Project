@@ -10,18 +10,23 @@ export const AdminDashboard = () => {
     });
 
     useEffect(() => {
-        const fetchStats = async () => {
-            try {
-                // Fetch users to count them
-                const res = await api.get("/users");
-                setStats(prev => ({ ...prev, totalUsers: res.data.length }));
-            } catch (error) {
-                console.error("Failed to fetch stats", error);
-            }
-        };
-
-        fetchStats();
-    }, []);
+    const fetchStats = async () => {
+        try {
+            const [usersRes, coursesRes] = await Promise.all([
+                api.get("/users"),
+                api.get("/courses") // API này nên trả về danh sách tất cả courses
+            ]);
+            
+            setStats({
+                totalUsers: usersRes.data.length,
+                totalCourses: coursesRes.data.length
+            });
+        } catch (error) {
+            console.error("Failed to fetch stats", error);
+        }
+    };
+    fetchStats();
+}, []);
 
     return (
         <div style={{ padding: '3rem' }}>

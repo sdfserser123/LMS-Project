@@ -3,6 +3,7 @@ const express = require('express')
 const db = require('./libs/db.js')
 const authRoute = require('./routes/authRoute.js')
 const userRoute = require('./routes/userRoute.js')
+const courseRoute = require('./routes/courseRoute.js');
 const protectedRoute = require('./middlewares/authMiddleware.js')
 const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
@@ -17,6 +18,8 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(cors({
@@ -24,13 +27,16 @@ app.use(cors({
     credentials: true,
 }))
 
+app.use('/uploads', express.static('public/uploads'));
+
 //public routes
 app.use('/api/auth', authRoute)
 
 
 //private routes (Bỏ protectedRoute khi chưa setup database)
 app.use('/api/users', protectedRoute, userRoute)
-
+app.use('/api/users', protectedRoute, userRoute);
+app.use('/api/courses', protectedRoute, courseRoute);
 
 //test api
 app.get('/user', async (req, res) => {

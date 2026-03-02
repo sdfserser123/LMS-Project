@@ -11,11 +11,11 @@ export const useAuthStore = create((set, get) => ({
   loading: false,
 
   setAccessToken: (accessToken) => {
-    set({accessToken});
+    set({ accessToken });
   },
 
   clearState: () => {
-    set({accessToken: null, user: null, loading: false})
+    set({ accessToken: null, user: null, loading: false })
   },
 
   logIn: async (username, password) => {
@@ -40,7 +40,7 @@ export const useAuthStore = create((set, get) => ({
 
       throw error
     } finally {
-      set({loading: false})
+      set({ loading: false })
     }
   },
 
@@ -56,29 +56,29 @@ export const useAuthStore = create((set, get) => ({
 
   fetchMe: async () => {
     try {
-      set({loading: true});
+      set({ loading: true });
       const user = await authService.fetchMe();
 
-      set({user});
+      set({ user });
       return user;
     } catch (error) {
       console.error(error)
-      set({user: null, accessToken: null});
+      set({ user: null, accessToken: null });
       toast.error("Lỗi xảy ra khi lấy dữ liệu người dùng")
-    } finally{
-      set({loading: false})
+    } finally {
+      set({ loading: false })
     }
   },
 
   refresh: async () => {
     try {
-      set({loading: true})
-      const {user, fetchMe, setAccessToken} = get();
+      set({ loading: true })
+      const { user, fetchMe, setAccessToken } = get();
       const accessToken = await authService.refresh();
 
       setAccessToken(accessToken)
 
-      if(!user){
+      if (!user) {
         await fetchMe();
       }
     } catch (error) {
@@ -86,7 +86,7 @@ export const useAuthStore = create((set, get) => ({
       toast.error("Phiên đăng nhập đã hết hạn")
       get().clearState();
     } finally {
-      set({loading: false})
+      set({ loading: false })
     }
   }
 }))

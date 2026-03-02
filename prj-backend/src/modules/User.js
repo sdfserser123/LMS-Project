@@ -1,6 +1,6 @@
 const db = require('../libs/db.js')
 const bcrypt = require('bcrypt')
-const generateUserId = require('../controllers/generateUserId.js')
+const { generateUserId } = require('../controllers/generateUserId.js')
 
 const User = {
     findByUsername: async (username) => {

@@ -16,9 +16,14 @@ export default function AddUserForm() {
   }
 
   const handleSubmit = async e => {
-    e.preventDefault()
-    await userService.addUser(form)
-    toast.success('Thêm user thành công!')
+    e.preventDefault();
+    try {
+      await userService.addUser(form);
+      toast.success('Thêm user thành công!');
+      // Optionally reset form here
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Lỗi khi thêm người dùng!');
+    }
   }
 
   return (

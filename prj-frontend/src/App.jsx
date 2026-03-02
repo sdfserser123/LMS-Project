@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LoginPage } from "./pages/logInPage";
 import { TestPage } from "./pages/TestPage";
 import AddUserPage from "./pages/admin/AddUserPage";
-import { AdminDashboard } from "./pages/admin/adminDashboard";
 import { CourseManagement } from "./pages/admin/CourseManagement";
 import { UserManagement } from "./pages/admin/UserManagement";
 import { StudentDashboard } from "./pages/student/StudentDashboard";
@@ -12,6 +11,7 @@ import { Toaster } from "sonner";
 import { RoleRedirect } from "./components/auth/RoleRedirect";
 import { useAuthStore } from "./stores/userAuthStore";
 import { AdminLayout } from "./components/admin/AdminLayout";
+import { AdminDashboard } from "./pages/admin/adminDashboard";
 import AddCoursePage from "./pages/admin/AddCoursePage";
 import { TeacherDashboard } from "./pages/teacher/teacherDashboard";
 import { TeacherLayout } from "./components/teacher/TeacherLayour";
@@ -19,6 +19,9 @@ import { TeacherLayout } from "./components/teacher/TeacherLayour";
 // IMPORT CÁC COMPONENT MỚI Ở ĐÂY
 import { CourseLayout } from "./components/courses/CourseLayout";
 import { LessonLayout } from "./components/courses/lessons/LessonLayout";
+import { StudentLayout } from "./components/student/StudentLayout";
+import { StudentCourses } from "./pages/student/StudentCourses";
+import { Settings } from "./pages/shared/Settings";
 
 function App() {
   const { refresh, loading } = useAuthStore();
@@ -48,8 +51,9 @@ function App() {
               <Route path="/admin/users" element={<UserManagement />} />
               <Route path="/admin/courses" element={<CourseManagement />} />
               <Route path="/admin/addcourse" element={<AddCoursePage />} />
+              <Route path="/admin/settings" element={<Settings />} />
               <Route path="/adduser" element={<AddUserPage />} />
-              
+
               {/* 1. Trang quản lý danh sách bài giảng của 1 khóa học */}
               <Route path="admin/lessons/:courseid" element={<CourseLayout />} />
             </Route>
@@ -59,6 +63,7 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={["instructor"]} />}>
             <Route element={<TeacherLayout />}>
               <Route path="/instructor" element={<TeacherDashboard />} />
+              <Route path="/instructor/settings" element={<Settings />} />
               {/* Thêm Route quản lý khóa học và bài học cho Giảng viên */}
               <Route path="/instructor/course/:courseid" element={<CourseLayout />} />
               <Route path="/instructor/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
@@ -67,12 +72,16 @@ function App() {
             </Route>
           </Route>
 
-          <Route element={<ProtectedRoute allowedRoles={["instructor","admin"]} />}>
-              <Route path="/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
+          <Route element={<ProtectedRoute allowedRoles={["instructor", "admin"]} />}>
+            <Route path="/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
           </Route>
           {/* Student */}
           <Route element={<ProtectedRoute allowedRoles={["student"]} />}>
-            <Route path="/student" element={<StudentDashboard />} />
+            <Route element={<StudentLayout />}>
+              <Route path="/student" element={<StudentDashboard />} />
+              <Route path="/student/courses" element={<StudentCourses />} />
+              <Route path="/student/settings" element={<Settings />} />
+            </Route>
           </Route>
 
           <Route path="/unauthorized" element={<h1>403 - Không có quyền</h1>} />

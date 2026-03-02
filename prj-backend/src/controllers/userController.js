@@ -135,6 +135,43 @@ const test = async (req, res) => {
   return res.sendStatus(204)
 }
 
+const updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.userid; // Get from JWT token
+    const { fullname, email, password } = req.body;
+
+    if (!fullname || !email) {
+      return res.status(400).json({ message: 'Thiếu dữ liệu: fullname hoặc email' });
+    }
+
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({ message: 'Không tìm thấy user' });
+    }
+
+    // Pass the user's existing username and role to the update function to preserve them
+    await User.updateUser(userId, {
+      fullname,
+      username: existingUser.username,
+      email,
+      password: password || null,
+      role: existingUser.role
+    });
+
+    await ActivityLog.create({
+      userId: userId,
+      action: 'UPDATE_PROFILE',
+      ip: req.ip,
+      details: { changes: { fullname, email, passwordUpdated: !!password } }
+    });
+
+    return res.status(200).json({ message: 'Cập nhật hồ sơ thành công' });
+  } catch (error) {
+    console.error('Lỗi khi updateProfile', error);
+    return res.status(500).json({ message: 'Lỗi hệ thống' });
+  }
+}
+
 module.exports = {
   authMe,
   addUser,
@@ -142,5 +179,6 @@ module.exports = {
   deleteUser,
   getAllUsers,
   getLogs,
-  test
+  test,
+  updateProfile
 }

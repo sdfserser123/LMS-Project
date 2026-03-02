@@ -1,11 +1,13 @@
 const express = require('express');
-const { authMe, addUser, updateUser, deleteUser, getAllUsers, getLogs, test } = require('../controllers/userController');
+const { authMe, addUser, updateUser, deleteUser, getAllUsers, getLogs, test, updateProfile } = require('../controllers/userController');
 const authorize = require('../middlewares/authorization.js')
 
 const router = express.Router();
 
 router.get('/me', authMe);
 
+// Cập nhật hồ sơ cá nhân (Mọi role đều được)
+router.put('/profile/edit', updateProfile);
 
 // Chỉ ADMIN
 router.post('/adduser', authorize(['admin']), addUser);

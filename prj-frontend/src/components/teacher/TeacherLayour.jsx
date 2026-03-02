@@ -16,6 +16,7 @@ export const TeacherLayout = () => {
         { path: '/teacher/dashboard', label: 'Teacher Dashboard', icon: LayoutDashboard },
         { path: '/admin/courses', label: 'My Courses', icon: BookOpen },
         { path: '/admin/addcourse', label: 'Create Course', icon: PlusCircle },
+        { path: '/instructor/settings', label: 'Settings', icon: Settings },
     ];
 
     return (
@@ -97,12 +98,12 @@ export const TeacherLayout = () => {
                             logOut();
                             navigate('/login');
                         }}
-                        style={{ 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: showSidebar ? 'flex-start' : 'center', 
-                            gap: '0.75rem', 
-                            color: '#f87171', 
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: showSidebar ? 'flex-start' : 'center',
+                            gap: '0.75rem',
+                            color: '#f87171',
                             cursor: 'pointer',
                             padding: '0.75rem',
                             borderRadius: '0.5rem'
@@ -118,7 +119,7 @@ export const TeacherLayout = () => {
             {/* Main Content Wrapper */}
             <main style={{
                 flex: 1,
-                marginLeft: '80px', 
+                marginLeft: '80px',
                 transition: 'margin-left 0.3s ease',
                 minHeight: '100vh',
                 width: '100%',

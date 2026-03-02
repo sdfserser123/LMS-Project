@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/userAuthStore';
-import SignOut from '../auth/signout';
-import { LayoutDashboard, Users, BookOpen, Settings, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Settings, LogOut } from 'lucide-react';
 
-export const AdminLayout = () => {
+export const StudentLayout = () => {
     const [isHovered, setIsHovered] = useState(false);
     const { user, logOut } = useAuthStore((state) => state);
     const location = useLocation();
@@ -13,10 +12,9 @@ export const AdminLayout = () => {
     const showSidebar = isHovered;
 
     const navItems = [
-        { path: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-        { path: '/admin/users', label: 'User Management', icon: Users },
-        { path: '/admin/courses', label: 'Course Management', icon: BookOpen },
-        { path: '/admin/settings', label: 'Settings', icon: Settings },
+        { path: '/student', label: 'Student Dashboard', icon: LayoutDashboard },
+        { path: '/student/courses', label: 'My Courses', icon: BookOpen },
+        { path: '/student/settings', label: 'Settings', icon: Settings },
     ];
 
     return (
@@ -46,18 +44,18 @@ export const AdminLayout = () => {
                     padding: '1.5rem',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center', // Always center since no toggle button
+                    justifyContent: 'center',
                     marginBottom: '2rem',
                     minHeight: '80px'
                 }}>
                     {showSidebar ? (
                         <div>
-                            <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>ADMIN</h1>
-                            <p style={{ color: '#9ca3af', fontSize: '1.0 rem' }}>{user?.fullname || 'Administrator'}</p>
+                            <h1 style={{ fontSize: '1.25rem', fontWeight: 'bold', letterSpacing: '0.05em', whiteSpace: 'nowrap' }}>STUDENT</h1>
+                            <p style={{ color: '#9ca3af', fontSize: '1.0 rem' }}>{user?.fullname || 'Student User'}</p>
                         </div>
                     ) : (
                         <div style={{ width: '32px', height: '32px', backgroundColor: 'white', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'black', fontWeight: 'bold' }}>
-                            A
+                            S
                         </div>
                     )}
                 </div>

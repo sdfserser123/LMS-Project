@@ -15,6 +15,8 @@ import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import AddCoursePage from "./pages/admin/AddCoursePage";
 import { TeacherDashboard } from "./pages/teacher/teacherDashboard";
 import { TeacherLayout } from "./components/teacher/TeacherLayout";
+import { TeacherAssignments } from "./pages/teacher/TeacherAssignments";
+import { TeacherStudents } from "./pages/teacher/TeacherStudents";
 
 // IMPORT CÁC COMPONENT MỚI Ở ĐÂY
 import { CourseLayout } from "./components/courses/CourseLayout";
@@ -71,6 +73,8 @@ function App() {
               {/* Thêm Route quản lý khóa học và bài học cho Giảng viên */}
               <Route path="/teacher/course/:courseid" element={<CourseLayout />} />
               <Route path="/teacher/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
+              <Route path="/teacher/assignments" element={<TeacherAssignments />} />
+              <Route path="/teacher/students" element={<TeacherStudents />} />
               {/* 1. Trang quản lý danh sách bài giảng của 1 khóa học */}
               <Route path="/teacher/lessons/:courseid" element={<CourseLayout />} />
               <Route path="/teacher/course/:courseid/assignment/:assignment_id" element={<AssignmentDetail />} />

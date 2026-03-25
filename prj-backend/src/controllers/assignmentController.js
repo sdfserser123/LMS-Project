@@ -48,6 +48,18 @@ const assignmentController = {
         }
     },
 
+    // Get all assignments for the logged-in instructor
+    getInstructorAssignments: async (req, res) => {
+        try {
+            const instructor_id = req.user.userid;
+            const assignments = await Assignment.getByInstructor(instructor_id);
+            res.status(200).json(assignments);
+        } catch (error) {
+            console.error("Get Instructor Assignments Error:", error);
+            res.status(500).json({ message: "Internal server error" });
+        }
+    },
+
     // Delete an assignment
     deleteAssignment: async (req, res) => {
         try {

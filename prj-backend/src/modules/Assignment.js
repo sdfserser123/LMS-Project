@@ -22,6 +22,19 @@ const Assignment = {
         return rows;
     },
 
+    // 2.1 Fetch all assignments for courses taught by an instructor
+    getByInstructor: async (instructor_id) => {
+        const query = `
+            SELECT a.*, c.title as course_title 
+            FROM assignments a
+            JOIN courses c ON a.course_id = c.courseid
+            WHERE c.instructor_id = ?
+            ORDER BY a.created_at DESC
+        `;
+        const [rows] = await db.execute(query, [instructor_id]);
+        return rows;
+    },
+
     // 3. Delete an assignment
     delete: async (id) => {
         const query = `DELETE FROM assignments WHERE id = ?`;

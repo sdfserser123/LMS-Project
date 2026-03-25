@@ -40,6 +40,22 @@ const Enrollment = {
             console.error("Error in assignCoursesToStudent:", error);
             throw error;
         }
+    },
+
+    // 3. Lấy danh sách học viên của một giảng viên (các học viên đăng ký vào khóa học của giảng viên đó)
+    getStudentsByInstructor: async (instructorId) => {
+        const query = `
+            SELECT DISTINCT u.userid, u.fullname, u.email, u.username,
+                   (SELECT COUNT(*) FROM enrollments e2 
+                    JOIN courses c2 ON e2.course_id = c2.courseid 
+                    WHERE e2.student_id = u.userid AND c2.instructor_id = ?) as course_count
+            FROM users u
+            JOIN enrollments e ON u.userid = e.student_id
+            JOIN courses c ON e.course_id = c.courseid
+            WHERE c.instructor_id = ?
+        `;
+        const [rows] = await db.execute(query, [instructorId, instructorId]);
+        return rows;
     }
 };
 

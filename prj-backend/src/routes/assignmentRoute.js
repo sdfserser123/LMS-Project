@@ -11,6 +11,9 @@ router.post('/course/:course_id', assignmentController.createAssignment);
 // Get all assignments for a course (Can be accessed by Students too)
 router.get('/course/:course_id', assignmentController.getAssignments);
 
+// Get all assignments for the currently logged-in instructor (across all their courses)
+router.get('/instructor/all', assignmentController.getInstructorAssignments);
+
 // Delete an assignment
 router.delete('/:id', assignmentController.deleteAssignment);
 

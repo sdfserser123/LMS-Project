@@ -27,6 +27,7 @@ export const RoleRedirect = () => {
   // Điều hướng theo role (giữ nguyên switch case của bạn)
   switch (user.role) {
     case "admin": return <Navigate to="/admin" replace />;
+    case "instructor": return <Navigate to="/teacher" replace />;
     case "student": return <Navigate to="/student" replace />;
     default: return <Navigate to="/unauthorized" replace />;
   }

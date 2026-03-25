@@ -16,8 +16,8 @@ export default function AddCourseForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const cancelPath = user?.role === 'admin' ? '/admin/courses' : '/instructor/courses';
-  const successPath = user?.role === 'admin' ? '/admin/courses' : '/instructor/courses';
+  const cancelPath = user?.role === 'admin' ? '/admin/courses' : '/teacher/courses';
+  const successPath = user?.role === 'admin' ? '/admin/courses' : '/teacher/courses';
 
   const handleSubmit = async (e) => {
     e.preventDefault();

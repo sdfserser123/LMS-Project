@@ -104,7 +104,7 @@ export const StudentDashboard = () => {
                             <div 
                                 key={course.courseid || course.id} 
                                 className="group insta-card p-8 flex flex-col h-full cursor-pointer hover:border-[var(--accent-primary)]/30 active:scale-[0.99] transition-all"
-                                onClick={() => navigate(`/student/lessons/${course.courseid || course.id}`)}
+                                onClick={() => navigate(`/student/course/${course.courseid || course.id}`)}
                             >
                                 <div className="mb-6 flex justify-between items-start">
                                     <div className="h-12 w-12 rounded-xl bg-[var(--text-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-lg group-hover:bg-[var(--accent-primary)] transition-colors">
@@ -148,4 +148,4 @@ export const StudentDashboard = () => {
             </section>
         </div>
     );
-};
+};

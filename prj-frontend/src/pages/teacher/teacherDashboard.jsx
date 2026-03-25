@@ -41,7 +41,7 @@ export const TeacherDashboard = () => {
                     </p>
                 </div>
                 <button 
-                    onClick={() => navigate("/instructor/addcourse")}
+                    onClick={() => navigate("/teacher/addcourse")}
                     className="flex items-center gap-2 bg-[var(--text-primary)] text-[var(--bg-primary)] px-8 py-4 rounded-2xl font-bold hover:opacity-90 transition-all shadow-xl active:scale-95 group"
                 >
                     <Plus className="h-5 w-5 group-hover:rotate-90 transition-transform" />
@@ -89,7 +89,7 @@ export const TeacherDashboard = () => {
                         <div 
                             key={course.courseid} 
                             className="insta-card p-8 group cursor-pointer flex flex-col h-full"
-                            onClick={() => navigate(`/instructor/lessons/${course.courseid}`)}
+                            onClick={() => navigate(`/teacher/lessons/${course.courseid}`)}
                         >
                             <div className="flex justify-between items-start mb-6">
                                 <span className={`
@@ -128,7 +128,7 @@ export const TeacherDashboard = () => {
                         Bắt đầu hành trình giảng dạy của bạn bằng cách tạo khóa học đầu tiên ngay hôm nay.
                     </p>
                     <button 
-                        onClick={() => navigate("/instructor/addcourse")}
+                        onClick={() => navigate("/teacher/addcourse")}
                         className="bg-[var(--text-primary)] text-[var(--bg-primary)] px-8 py-4 rounded-2xl font-bold hover:scale-105 transition-all shadow-xl"
                     >
                         Tạo khóa học đầu tiên

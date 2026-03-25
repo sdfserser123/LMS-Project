@@ -28,7 +28,7 @@ export const LessonLayout = () => {
   const [loading, setLoading] = useState(true);
   const [blocks, setBlocks] = useState([]);
 
-  const listPath = user?.role === 'admin' ? `/admin/lessons/${courseid}` : `/instructor/lessons/${courseid}`;
+  const listPath = user?.role === 'admin' ? `/admin/lessons/${courseid}` : `/teacher/lessons/${courseid}`;
 
   const goBack = () => navigate(listPath, { replace: true });
 

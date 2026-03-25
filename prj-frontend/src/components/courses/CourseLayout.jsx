@@ -99,13 +99,13 @@ export const CourseLayout = () => {
   const navigateToAssignment = (id) => {
     if (user?.role === 'student') navigate(`/student/assignment/${id}`);
     else if (user?.role === 'admin') navigate(`/admin/assignment/${id}`);
-    else navigate(`/instructor/course/${courseid}/assignment/${id}`);
+    else navigate(`/teacher/course/${courseid}/assignment/${id}`);
   };
 
   const getBackPath = () => {
     if (user?.role === 'admin') return '/admin/courses';
     if (user?.role === 'student') return '/student/courses';
-    return '/instructor/courses';
+    return '/teacher/courses';
   };
 
   if (loading && lessons.length === 0) return (

@@ -61,19 +61,19 @@ function App() {
             </Route>
           </Route>
 
-          {/* Instructor (Giảng viên) */}
+          {/* Teacher (Giảng viên) */}
           <Route element={<ProtectedRoute allowedRoles={["instructor"]} />}>
             <Route element={<TeacherLayout />}>
-              <Route path="/instructor" element={<TeacherDashboard />} />
-              <Route path="/instructor/courses" element={<CourseManagement />} />
-              <Route path="/instructor/addcourse" element={<AddCoursePage />} />
-              <Route path="/instructor/settings" element={<Settings />} />
+              <Route path="/teacher" element={<TeacherDashboard />} />
+              <Route path="/teacher/courses" element={<CourseManagement />} />
+              <Route path="/teacher/addcourse" element={<AddCoursePage />} />
+              <Route path="/teacher/settings" element={<Settings />} />
               {/* Thêm Route quản lý khóa học và bài học cho Giảng viên */}
-              <Route path="/instructor/course/:courseid" element={<CourseLayout />} />
-              <Route path="/instructor/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
+              <Route path="/teacher/course/:courseid" element={<CourseLayout />} />
+              <Route path="/teacher/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
               {/* 1. Trang quản lý danh sách bài giảng của 1 khóa học */}
-              <Route path="/instructor/lessons/:courseid" element={<CourseLayout />} />
-              <Route path="/instructor/course/:courseid/assignment/:assignment_id" element={<AssignmentDetail />} />
+              <Route path="/teacher/lessons/:courseid" element={<CourseLayout />} />
+              <Route path="/teacher/course/:courseid/assignment/:assignment_id" element={<AssignmentDetail />} />
             </Route>
           </Route>
 

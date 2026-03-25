@@ -77,7 +77,7 @@ export const CourseManagement = () => {
                 </div>
                 
                 <button
-                    onClick={() => navigate(user?.role === 'admin' ? '/admin/addcourse' : '/instructor/addcourse')}
+                    onClick={() => navigate(user?.role === 'admin' ? '/admin/addcourse' : '/teacher/addcourse')}
                     className="flex items-center gap-2 bg-[var(--text-primary)] text-[var(--bg-primary)] px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg active:scale-95"
                 >
                     <Plus className="h-5 w-5" />
@@ -129,7 +129,7 @@ export const CourseManagement = () => {
                                         <td className="px-6 py-4 whitespace-nowrap text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button
-                                                    onClick={() => navigate(user?.role === 'admin' ? `/admin/lessons/${c.courseid}` : `/instructor/lessons/${c.courseid}`)}
+                                                    onClick={() => navigate(user?.role === 'admin' ? `/admin/lessons/${c.courseid}` : `/teacher/lessons/${c.courseid}`)}
                                                     className="p-2 text-indigo-500 hover:bg-indigo-500/10 rounded-lg transition-colors flex items-center gap-1 text-sm font-bold"
                                                     title="Manage Lessons"
                                                 >

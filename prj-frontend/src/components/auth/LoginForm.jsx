@@ -32,7 +32,7 @@ export const LoginForm = () => {
           navigate("/admin");
           break;
         case "instructor":
-          navigate("/instructor");
+          navigate("/teacher");
           break;
         case "student":
           navigate("/student");

@@ -47,8 +47,6 @@ export const LoginForm = () => {
 
   return (
     <div className="glass-card p-10 shadow-2xl relative overflow-hidden group">
-      {/* Decorative accent */}
-      <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 opacity-80" />
       
       <div className="mb-10 text-center">
         <h1 className="text-3xl font-black text-[var(--text-primary)] tracking-tight mb-2">
@@ -133,8 +131,6 @@ export const LoginForm = () => {
         </button>
       </form>
 
-      {/* Decorative background element */}
-      <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-[var(--accent-primary)] opacity-5 rounded-full blur-3xl pointer-events-none group-hover:opacity-10 transition-opacity" />
     </div>
   );
 };

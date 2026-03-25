@@ -4,12 +4,7 @@ import { Navbar } from "../components/common/Navbar";
 
 export const LoginPage = () => {
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-slate-950">
-      {/* Background Mesh Gradient - matching global style but ensuring it's visible on login */}
-      <div className="absolute inset-0 z-0 opacity-50">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/20 blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-emerald-600/20 blur-[120px]" />
-      </div>
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
 
       <Navbar />
 

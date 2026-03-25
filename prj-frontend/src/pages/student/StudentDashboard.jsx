@@ -41,7 +41,6 @@ export const StudentDashboard = () => {
         <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-700">
             {/* Hero Header */}
             <header className="relative p-10 glass-card overflow-hidden shadow-2xl">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-32 -mt-32" />
                 <div className="relative z-10">
                     <h2 className="text-4xl sm:text-5xl font-black text-[var(--text-primary)] tracking-tighter leading-none mb-4">
                         My Learning <span className="text-[var(--accent-primary)] italic">Dashboard</span>

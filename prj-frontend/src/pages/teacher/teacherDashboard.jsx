@@ -53,36 +53,17 @@ export const TeacherDashboard = () => {
                 aria-labelledby="dashboard-title"
             >
                 {/* Header / Hero Section */}
-                <header className="glass-card p-8 md:p-14 lg:p-16 relative overflow-hidden group mb-8 md:mb-12 shadow-2xl">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-40 -mt-40 transition-transform duration-1000 group-hover:scale-125 pointer-events-none" />
-
-                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8 md:gap-12">
-                    <div className="space-y-4 md:space-y-6">
-                        <div className="flex items-center gap-4 md:gap-6">
-                            <div className="h-14 w-14 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-xl">
-                                <GraduationCap className="h-6 w-6" strokeWidth={1.5} />
-                            </div>
-                            <div className="flex flex-col">
-                                <h1 id="dashboard-title" className="text-3xl md:text-5xl lg:text-6xl font-black text-[var(--text-primary)] tracking-tighter italic leading-none">
-                                    {t('portal_teacher')}
-                                </h1>
-                                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-40 italic">{t('portal_teacher_sub')}</span>
-                            </div>
-                        </div>
-                        <p className="text-[var(--text-secondary)] font-medium text-base md:text-xl italic opacity-80 leading-relaxed max-w-2xl">
-                            {t('dash_welcome', { name: user?.fullname || t('portal_teacher_sub') })}
-                        </p>
+                <header className="flex items-center gap-6 mb-12 md:mb-16">
+                    <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm shrink-0">
+                        <GraduationCap className="h-5 w-5 opacity-60" strokeWidth={1.5} />
                     </div>
-                    <button
-                        onClick={() => navigate("/teacher/addcourse")}
-                        aria-label={t('course_create_aria') || "Initialize new academic curriculum"}
-                        className="btn-primary flex items-center justify-center gap-3 !px-8 md:!px-12 h-14 md:h-16 text-[10px] md:text-xs font-black uppercase tracking-widest group shadow-2xl active:scale-95 transition-all w-full md:w-auto"
-                    >
-                        <Plus className="h-5 md:h-6 w-5 md:w-6 group-hover:rotate-90 transition-transform duration-500" />
-                        {t('course_create')}
-                    </button>
-                </div>
-            </header>
+                    <div className="flex flex-col">
+                        <p className="text-[var(--text-secondary)] font-medium text-lg md:text-xl italic opacity-80 leading-relaxed truncate">
+                            {t('dash_welcome', { name: user?.fullname || 'Educator' })}
+                        </p>
+                        <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-30 italic">{t('portal_teacher_sub')}</span>
+                    </div>
+                </header>
 
             {/* Quick Stats Grid */}
             <section 

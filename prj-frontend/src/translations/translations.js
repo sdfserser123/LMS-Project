@@ -2,7 +2,8 @@ export const translations = {
   en: {
     // Navigation
     nav_dashboard: "Dashboard",
-    nav_courses: "My Courses",
+    nav_search_placeholder: "Search...",
+    nav_courses: "Course Management",
     nav_users: "User Management",
     nav_settings: "Settings",
     nav_assignments: "Assignments",
@@ -19,7 +20,7 @@ export const translations = {
     settings_theme: "Appearance Mode",
     settings_lang: "Interface Language",
     settings_account: "Account Configuration",
-    portal_identity: "THE ACADEMIC",
+    portal_identity: "THE ACADEMIC HOOD",
 
     // Footer
     footer_rights: "All rights reserved",
@@ -123,7 +124,7 @@ export const translations = {
     table_instructor: "Instructor",
     table_operations: "Operations",
     course_academic_module: "Academic Module",
-    course_curriculum_btn: "Chương trình",
+    course_curriculum_btn: "Curriculum",
     course_approve_btn: "Approve",
     course_sync_data: "Synchronizing academic data...",
     course_none_found: "No Courses Found",
@@ -353,7 +354,8 @@ export const translations = {
   vi: {
     // Navigation
     nav_dashboard: "Trang chủ",
-    nav_courses: "Khóa học của tôi",
+    nav_search_placeholder: "Tìm kiếm...",
+    nav_courses: "Quản lý khóa học",
     nav_users: "Quản lý người dùng",
     nav_settings: "Cài đặt",
     nav_assignments: "Bài tập",
@@ -370,7 +372,7 @@ export const translations = {
     settings_theme: "Chế độ hiển thị",
     settings_lang: "Ngôn ngữ giao diện",
     settings_account: "Cấu hình tài khoản",
-    portal_identity: "HỌC THUẬT",
+    portal_identity: "THE ACADEMIC HOOD",
 
     // Footer
     footer_rights: "Bảo lưu mọi quyền",

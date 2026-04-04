@@ -51,14 +51,14 @@ export const TeacherStudents = () => {
                     <p className="text-[var(--text-secondary)] font-medium">{t('student_roster_sub')}</p>
                 </div>
                 
-                <div className="relative w-full md:w-96 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[var(--text-secondary)] group-focus-within:text-[var(--accent-primary)] transition-colors" />
+                <div className="flex items-center gap-4 bg-[var(--bg-secondary)] border border-[var(--border-color)] px-6 py-4 rounded-2xl w-full md:w-96 group focus-within:ring-2 focus-within:ring-[var(--accent-primary)]/20 focus-within:border-[var(--accent-primary)] transition-all shadow-sm">
+                    <Search className="h-5 w-5 text-[var(--text-secondary)] opacity-50 group-focus-within:text-[var(--accent-primary)] group-focus-within:opacity-100 transition-colors shrink-0" />
                     <input 
                         type="text"
                         placeholder={t('search_scholars')}
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-12 pr-4 py-4 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--accent-primary)]/20 focus:border-[var(--accent-primary)] transition-all shadow-sm font-medium"
+                        className="bg-transparent border-none outline-none w-full text-[var(--text-primary)] font-medium placeholder:text-[var(--text-secondary)]/40"
                     />
                 </div>
             </header>

@@ -57,57 +57,50 @@ export const StudentAssignments = () => {
   return (
     <main className="max-w-7xl mx-auto p-4 md:p-8 lg:p-12 space-y-10 animate-fade-in-up pb-32">
       {/* Header Section */}
-      <header className="glass-card p-10 md:p-14 relative overflow-hidden group shadow-2xl">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-110 pointer-events-none" />
-        
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-6">
-              <div className="h-14 w-14 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-xl">
-                <ClipboardList className="h-6 w-6" strokeWidth={1.5} />
-              </div>
-              <div className="space-y-1">
-                <h1 className="text-3xl md:text-5xl font-black text-[var(--text-primary)] tracking-tighter italic leading-none">
-                  {t('assign_title')}
-                </h1>
-                <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-40 italic">
-                  {t('portal_student_sub')}
-                </span>
-              </div>
-            </div>
-            <p className="text-[var(--text-secondary)] font-medium text-lg italic opacity-80 max-w-2xl leading-relaxed">
-              {t('assign_subtitle')}
-            </p>
+      {/* Minimalist Portal Header */}
+      <header className="flex flex-col md:flex-row justify-between items-center gap-8 mb-12 md:mb-16">
+        <div className="flex items-center gap-6">
+          <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm shrink-0">
+            <ClipboardList className="h-5 w-5 opacity-60" strokeWidth={1.5} />
           </div>
-
-          <div className="flex items-center gap-3 w-full md:w-auto">
-             <div className="relative flex-1 md:w-80 group">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[var(--text-secondary)] opacity-40 group-focus-within:text-[var(--accent-primary)] group-focus-within:opacity-100 transition-all" />
-                <input 
-                  type="text"
-                  placeholder={t('search_projects')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] text-[var(--text-primary)] focus:outline-none focus:ring-4 focus:ring-[var(--accent-primary)]/10 focus:border-[var(--accent-primary)] transition-all font-medium"
-                />
-             </div>
-             <div className="hidden sm:flex bg-[var(--bg-secondary)]/50 p-1.5 rounded-2xl border border-[var(--border-color)]">
-                <button 
-                  onClick={() => setViewMode('grid')}
-                  className={`p-2.5 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-lg' : 'text-[var(--text-secondary)] hover:text-[var(--accent-primary)]'}`}
-                >
-                  <LayoutGrid className="h-5 w-5" />
-                </button>
-                <button 
-                  onClick={() => setViewMode('table')}
-                  className={`p-2.5 rounded-xl transition-all ${viewMode === 'table' ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-lg' : 'text-[var(--text-secondary)] hover:text-[var(--accent-primary)]'}`}
-                >
-                  <List className="h-5 w-5" />
-                </button>
-             </div>
+          <div className="flex flex-col">
+            <p className="text-[var(--text-secondary)] font-medium text-lg md:text-xl italic opacity-80 leading-relaxed truncate">
+              {t('assign_title')}
+            </p>
+            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-30 italic">
+              Scholar Identity
+            </span>
           </div>
         </div>
+
+        <div className="flex items-center gap-3 w-full md:w-auto">
+           <div className="flex items-center gap-4 bg-[var(--bg-secondary)]/50 border border-[var(--border-color)] px-6 py-4 rounded-2xl w-full md:w-80 group focus-within:ring-4 focus-within:ring-[var(--accent-primary)]/10 focus-within:border-[var(--accent-primary)] transition-all">
+              <Search className="h-5 w-5 text-[var(--text-secondary)] opacity-40 group-focus-within:text-[var(--accent-primary)] group-focus-within:opacity-100 transition-all shrink-0" />
+              <input 
+                type="text"
+                placeholder={t('search_projects')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-transparent border-none outline-none w-full text-[var(--text-primary)] font-medium placeholder:text-[var(--text-secondary)]/40"
+              />
+           </div>
+           <div className="hidden sm:flex bg-[var(--bg-secondary)]/50 p-1.5 rounded-2xl border border-[var(--border-color)]">
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={`p-2.5 rounded-xl transition-all ${viewMode === 'grid' ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-lg' : 'text-[var(--text-secondary)] hover:text-[var(--accent-primary)]'}`}
+              >
+                <LayoutGrid className="h-5 w-5" />
+              </button>
+              <button 
+                onClick={() => setViewMode('table')}
+                className={`p-2.5 rounded-xl transition-all ${viewMode === 'table' ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-lg' : 'text-[var(--text-secondary)] hover:text-[var(--accent-primary)]'}`}
+              >
+                <List className="h-5 w-5" />
+              </button>
+           </div>
+        </div>
       </header>
+
 
       {/* Content Section */}
       <section className="min-h-[400px]">

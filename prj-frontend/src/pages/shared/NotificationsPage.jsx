@@ -61,15 +61,18 @@ export const NotificationsPage = () => {
   };
 
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-black transition-colors duration-300">
+    <section className="flex-1 min-h-screen bg-[var(--bg-primary)] transition-colors duration-500 animate-fade-in relative overflow-x-hidden">
+      {/* Decorative Top Accent */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[var(--accent-primary)]/10 to-transparent" />
+
       {/* Sticky Header */}
-      <header className="sticky top-0 z-30 bg-zinc-50/80 dark:bg-black/80 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800">
+      <header className="sticky top-0 z-30 bg-[var(--bg-primary)]/80 backdrop-blur-md border-b border-[var(--border-color)]">
         <div className="max-w-4xl mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-1">
-            <h1 className="text-3xl font-medium text-zinc-900 dark:text-zinc-300 tracking-tighter italic leading-relaxed">
+            <h1 className="text-3xl md:text-4xl font-black text-[var(--text-primary)] tracking-tighter italic leading-none">
               {t('notif_title')}
             </h1>
-            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-zinc-500 italic">
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-40 italic">
               {unreadCount} {t('notif_new_count')}
             </p>
           </div>
@@ -77,13 +80,13 @@ export const NotificationsPage = () => {
           <div className="flex items-center gap-3 w-full md:w-auto">
             <button 
               onClick={markAllAsRead}
-              className="flex-1 md:flex-none h-11 px-6 rounded-xl bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-black text-[10px] font-medium uppercase tracking-widest active:scale-95 transition-all shadow-sm italic"
+              className="flex-1 md:flex-none h-11 px-6 rounded-xl bg-[var(--text-primary)] text-[var(--bg-primary)] text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl italic"
             >
               {t('notif_mark_all')}
             </button>
             <button 
               onClick={clearAllNotifications}
-              className="flex-1 md:flex-none h-11 px-6 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-300 text-[10px] font-medium uppercase tracking-widest hover:bg-zinc-200/50 dark:hover:bg-white/5 active:scale-95 transition-all italic"
+              className="flex-1 md:flex-none h-11 px-6 rounded-xl border border-[var(--border-color)] text-[var(--text-primary)] text-[10px] font-black uppercase tracking-widest hover:bg-[var(--text-primary)]/[0.03] active:scale-95 transition-all italic"
             >
               {t('notif_clear_all')}
             </button>
@@ -95,27 +98,27 @@ export const NotificationsPage = () => {
       <div className="max-w-4xl mx-auto px-6 py-12 pb-32">
         {loading && notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-40 animate-pulse">
-            <Loader2 className="h-8 w-8 animate-spin text-zinc-900 dark:text-zinc-100 mb-4 opacity-20" />
-            <p className="text-[10px] font-medium uppercase tracking-[0.3em] text-zinc-500 italic">
+            <Loader2 className="h-8 w-8 animate-spin text-[var(--accent-primary)] mb-4 opacity-20" />
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--text-secondary)] opacity-40 italic">
               Synchronizing updates...
             </p>
           </div>
         ) : notifications.length === 0 ? (
-          <div className="py-32 text-center flex flex-col items-center justify-center border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-[2.5rem]">
-            <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-900 rounded-full flex items-center justify-center mb-8">
-              <BellOff className="h-8 w-8 text-zinc-400 opacity-40" />
+          <div className="py-32 text-center flex flex-col items-center justify-center border-2 border-dashed border-[var(--border-color)] rounded-[2.5rem]">
+            <div className="w-20 h-20 bg-[var(--bg-secondary)] rounded-full flex items-center justify-center mb-8">
+              <BellOff className="h-8 w-8 text-[var(--text-secondary)] opacity-40" />
             </div>
-            <h3 className="text-xl font-medium text-zinc-900 dark:text-zinc-300 mb-2 italic">
+            <h3 className="text-xl font-black text-[var(--text-primary)] mb-2 italic">
               {t('notif_empty')}
             </h3>
-            <p className="text-zinc-500 text-sm font-medium italic opacity-60">
+            <p className="text-[var(--text-secondary)] text-sm font-medium italic opacity-60">
               {t('notif_empty_sub')}
             </p>
           </div>
         ) : (
           <div className="space-y-4">
             {notifications.map((n, idx) => {
-              const { icon: Icon, color } = getIcon(n.type);
+              const { icon: Icon } = getIcon(n.type);
               return (
                 <article 
                   key={n.id}
@@ -123,26 +126,26 @@ export const NotificationsPage = () => {
                   className={`
                     group relative p-6 md:p-8 rounded-3xl border transition-all duration-500 animate-fade-in-up stagger-${(idx % 5) + 1} cursor-pointer
                     ${n.is_read 
-                      ? 'bg-transparent border-zinc-200 dark:border-zinc-800 opacity-60 grayscale-[0.5]' 
-                      : 'bg-white dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800 shadow-xl shadow-black/5'}
+                      ? 'bg-transparent border-[var(--border-color)] opacity-60 grayscale-[0.5]' 
+                      : 'bg-[var(--card-bg)] border-[var(--card-border)] shadow-xl shadow-black/5'}
                   `}
                 >
                   <div className="flex gap-6 md:gap-8 items-start">
-                    <div className={`mt-1 h-10 w-10 shrink-0 rounded-xl flex items-center justify-center bg-zinc-100 dark:bg-white/5 ${color}`}>
+                    <div className={`mt-1 h-10 w-10 shrink-0 rounded-xl flex items-center justify-center bg-[var(--bg-secondary)] text-[var(--text-primary)]`}>
                       <Icon size={18} strokeWidth={1.5} />
                     </div>
                     
                     <div className="flex-1 min-w-0 space-y-4">
                       <div className="space-y-1">
                         <div className="flex items-center justify-between gap-4">
-                           <p className={`text-base md:text-lg leading-relaxed break-words font-medium italic ${n.is_read ? 'text-zinc-500' : 'text-zinc-900 dark:text-zinc-100'}`}>
+                           <p className={`text-base md:text-lg leading-relaxed break-words font-medium italic ${n.is_read ? 'text-[var(--text-secondary)]' : 'text-[var(--text-primary)]'}`}>
                              {n.message}
                            </p>
                            {!n.is_read && (
-                             <div className="h-2 w-2 rounded-full bg-zinc-900 dark:bg-zinc-100 shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.2)]" />
+                             <div className="h-2 w-2 rounded-full bg-[var(--accent-primary)] shrink-0 shadow-[0_0_8px_var(--accent-primary)]" />
                            )}
                         </div>
-                        <span className="text-[10px] text-zinc-500 font-medium mt-2 block uppercase tracking-[0.2em] opacity-60">
+                        <span className="text-[10px] text-[var(--text-secondary)] font-black mt-2 block uppercase tracking-[0.2em] opacity-60">
                           {timeAgo(n.created_at)}
                         </span>
                       </div>
@@ -150,7 +153,7 @@ export const NotificationsPage = () => {
 
                     <button 
                       onClick={(e) => handleDelete(n.id, e)}
-                      className="flex-none h-11 w-11 flex items-center justify-center rounded-xl hover:bg-rose-500/10 hover:text-rose-500 text-zinc-400 opacity-0 group-hover:opacity-100 transition-all duration-300"
+                      className="flex-none h-11 w-11 flex items-center justify-center rounded-xl hover:bg-rose-500/10 hover:text-rose-500 text-[var(--text-secondary)] opacity-0 group-hover:opacity-100 transition-all duration-300"
                       aria-label="Delete"
                     >
                       <Trash size={18} strokeWidth={1.5} />
@@ -162,6 +165,6 @@ export const NotificationsPage = () => {
           </div>
         )}
       </div>
-    </main>
+    </section>
   );
 };

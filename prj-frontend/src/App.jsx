@@ -15,6 +15,7 @@ import { TeacherLayout } from "./components/teacher/TeacherLayout";
 import { StudentLayout } from "./components/student/StudentLayout";
 import { CourseLayout } from "./components/courses/CourseLayout";
 import { LessonLayout } from "./components/courses/lessons/LessonLayout";
+import { DynamicPortalLayout } from "./components/layout/DynamicPortalLayout";
 
 // Pages
 import { LoginPage } from "./pages/logInPage";
@@ -102,8 +103,10 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={["instructor", "admin"]} />}>
-            <Route path="/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
-            <Route path="/course/:courseid/lesson/new" element={<LessonLayout />} />
+            <Route element={<DynamicPortalLayout />}>
+              <Route path="/course/:courseid/lesson/:lessonid" element={<LessonLayout />} />
+              <Route path="/course/:courseid/lesson/new" element={<LessonLayout />} />
+            </Route>
           </Route>
           {/* Student */}
           <Route element={<ProtectedRoute allowedRoles={["student"]} />}>

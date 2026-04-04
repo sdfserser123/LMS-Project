@@ -49,25 +49,17 @@ export const StudentDashboard = () => {
                 aria-labelledby="student-dash-title"
             >
                 {/* Academic Hero Header */}
-                <header className="relative p-8 md:p-14 lg:p-16 glass-card overflow-hidden group shadow-2xl">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-64 -mt-64 transition-transform duration-1000 group-hover:scale-110 pointer-events-none" />
-                <div className="relative z-10 space-y-6">
-                    <div className="flex items-center gap-6">
-                        <div className="h-14 w-14 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-xl">
-                            <ShieldCheck className="h-6 w-6" strokeWidth={1.5} />
-                        </div>
-                        <div className="space-y-1">
-                            <h1 id="student-dash-title" className="text-3xl md:text-5xl lg:text-7xl font-black text-[var(--text-primary)] tracking-tighter italic leading-none">
-                                {t('nav_learning_hub') || "Learning Hub"}
-                            </h1>
-                            <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-40 italic">{t('portal_student_sub')}</span>
-                        </div>
+                <header className="flex items-center gap-6 mb-12 md:mb-16">
+                    <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm shrink-0">
+                        <ShieldCheck className="h-5 w-5 opacity-60" strokeWidth={1.5} />
                     </div>
-                    <p className="text-[var(--text-secondary)] font-medium text-lg md:text-2xl max-w-3xl leading-relaxed italic opacity-80">
-                        {t('dash_welcome', { name: user?.fullname || t('portal_student_sub') })}
-                    </p>
-                </div>
-            </header>
+                    <div className="flex flex-col">
+                        <p className="text-[var(--text-secondary)] font-medium text-lg md:text-xl italic opacity-80 leading-relaxed truncate">
+                            {t('dash_welcome', { name: user?.fullname || t('portal_student_sub') })}
+                        </p>
+                        <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-30 italic">{t('portal_student_sub')}</span>
+                    </div>
+                </header>
 
             {/* Scholastic Metrics */}
             <section 

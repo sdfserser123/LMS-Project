@@ -1,0 +1,13 @@
+CREATE TABLE `lessons` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `lesson_id` varchar(20) NOT NULL,
+  `course_id` varchar(20) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text,
+  `video_url` varchar(500) DEFAULT NULL,
+  `attachments` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_lessons_course` (`course_id`),
+  CONSTRAINT `fk_lessons_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`courseid`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

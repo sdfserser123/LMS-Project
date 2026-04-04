@@ -126,66 +126,32 @@ export const CourseLayout = () => {
       role="main" 
       className="max-w-6xl mx-auto space-y-6 md:space-y-10 animate-fade-in-up p-4 md:p-0 pb-32"
     >
-      {/* Mobile-Only Summary Header */}
-      <div className="md:hidden space-y-4 px-2">
-        <button
-            onClick={() => navigate(getBackPath())}
-            className="flex items-center gap-2 text-[var(--text-secondary)] font-medium uppercase tracking-widest text-[9px] bg-[var(--bg-secondary)] px-4 py-2 rounded-full border border-[var(--border-color)]"
-        >
-            <ArrowLeft size={12} /> {t('course_back_to_dash')}
-        </button>
-        <h1 className="text-3xl font-medium text-[var(--text-primary)] italic leading-relaxed tracking-tighter break-words hyphens-auto">
-            {course.title || t('course_curriculum_overview')}
-        </h1>
-      </div>
-
-      {/* Desktop Header Section - Inverted B&W logic */}
-      <section 
-        className="hidden md:block bg-[var(--text-primary)] text-[var(--bg-primary)] p-10 md:p-16 rounded-[2.5rem] relative overflow-hidden group shadow-2xl"
-        aria-labelledby="course-title"
-      >
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--bg-primary)] opacity-[0.03] rounded-full -mr-48 -mt-48 transition-transform duration-1000 group-hover:scale-125 pointer-events-none" />
-        
-        <div className="relative z-10 flex flex-col lg:flex-row justify-between gap-12">
-          <div className="space-y-8 flex-1">
-            <button
-                onClick={() => navigate(getBackPath())}
-                className="flex items-center justify-center gap-2 text-[var(--bg-primary)] opacity-60 hover:opacity-100 transition-all h-11 px-5 rounded-xl font-medium uppercase tracking-widest group/back border border-[var(--bg-primary)]/20 hover:bg-[var(--bg-primary)]/10 w-fit"
-            >
-                <ArrowLeft className="h-4 w-4 group-hover/back:-translate-x-1.5 transition-transform" />
-                <span className="text-[10px] md:text-xs">{t('course_back_to_dash')}</span>
-            </button>
-            
-            <h1 id="course-title" className="text-4xl md:text-6xl font-medium text-[var(--bg-primary)] tracking-tight leading-relaxed italic break-words hyphens-auto">
-                {course.title || t('course_curriculum_overview')}
-            </h1>
-            
-            <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2.5 bg-[var(--bg-primary)]/10 px-5 py-2.5 rounded-2xl text-[var(--bg-primary)] font-medium text-[10px] uppercase tracking-[0.2em] border border-[var(--bg-primary)]/20">
-                    <Layout size={14} className="opacity-60" />
-                    CID: {courseid}
-                </div>
-                {lessons.length > 0 && (
-                    <div className="flex items-center gap-2.5 bg-[var(--bg-primary)]/10 px-5 py-2.5 rounded-2xl text-[var(--bg-primary)] font-medium text-[10px] uppercase tracking-[0.2em] border border-[var(--bg-primary)]/20">
-                        <Layers size={14} className="opacity-60" />
-                        {lessons.length} {t('course_learning_modules')}
-                    </div>
-                )}
-            </div>
+      {/* Compact Command Center Header */}
+      <header className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-12">
+        <div className="flex items-center gap-6 w-full sm:w-auto">
+          <div className="h-14 w-14 rounded-2xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm shrink-0">
+            <BookOpen className="h-6 w-6 opacity-60" />
           </div>
-
-          <div className="relative z-10 flex flex-col justify-end max-w-full lg:max-w-sm">
-            <div className="bg-[var(--bg-primary)]/5 p-8 rounded-[2.5rem] border border-[var(--border-color)] shadow-sm backdrop-blur-md">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--bg-primary)] mb-4 flex items-center gap-2 opacity-40">
-                    <Info size={14} /> {t('course_synopsis')}
-                </h2>
-                <p className="text-[var(--bg-primary)] text-sm leading-relaxed line-clamp-5 font-medium italic opacity-80 break-words hyphens-auto">
-                    {course.description || t('course_default_desc')}
-                </p>
+          <div className="space-y-1.5 overflow-hidden">
+            <h1 className="text-2xl md:text-3xl font-medium text-[var(--text-primary)] tracking-tight italic truncate">
+              {course.title || t('course_curriculum_overview')}
+            </h1>
+            <div className="flex items-center gap-6 text-[15px] uppercase tracking-[0.2em] font-black text-[var(--text-secondary)]">
+              <button 
+                onClick={() => navigate(getBackPath())}
+                className="flex items-center gap-4 px-4 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--accent-primary)] transition-all group/back leading-relaxed"
+              >
+                <ArrowLeft size={16} className="group-hover/back:-translate-x-1.5 transition-transform" /> 
+                {t('course_back_to_dash')}
+              </button>
+              <div className="flex items-center gap-4 opacity-40 py-2.5 overflow-hidden">
+                <span className="text-[12px]">•</span>
+                <span className="truncate italic">CID: {courseid}</span>
+              </div>
             </div>
           </div>
         </div>
-      </section>
+      </header>
 
       {/* Main Content Area */}
       <section className="bg-[var(--bg-primary)] border border-[var(--border-color)] overflow-hidden min-h-[600px] flex flex-col rounded-[2.5rem] shadow-sm">
@@ -230,9 +196,9 @@ export const CourseLayout = () => {
                 {isInstructorOrAdmin && (
                   <button 
                     onClick={handleAddLesson} 
-                    className="btn-monochrome h-14 !px-10 text-[10px] uppercase tracking-widest shadow-xl active:scale-95"
+                    className="btn-primary w-full sm:w-auto flex items-center justify-center gap-3 !px-10 !py-5 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 group active:scale-95 transition-all duration-300 text-[10px] uppercase tracking-widest bg-[var(--nav-bg)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]"
                   >
-                    <Plus size={18} strokeWidth={1.5} />
+                    <Plus className="h-5 w-5 group-hover:rotate-90 group-hover:scale-110 transition-transform duration-300" />
                     {t('course_add_lesson')}
                   </button>
                 )}
@@ -283,9 +249,9 @@ export const CourseLayout = () => {
                 {isInstructorOrAdmin && (
                   <button 
                     onClick={() => setIsAssignmentModalOpen(true)} 
-                    className="btn-monochrome h-14 !px-10 text-[10px] uppercase tracking-widest shadow-xl active:scale-95"
+                    className="btn-primary w-full sm:w-auto flex items-center justify-center gap-3 !px-10 !py-5 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 group active:scale-95 transition-all duration-300 text-[10px] uppercase tracking-widest bg-[var(--nav-bg)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]"
                   >
-                    <Plus size={18} strokeWidth={1.5} />
+                    <Plus className="h-5 w-5 group-hover:rotate-90 group-hover:scale-110 transition-transform duration-300" />
                     {t('course_add_assignment')}
                   </button>
                 )}
@@ -430,9 +396,9 @@ export const CourseLayout = () => {
                 </button>
                 <button
                   type="submit"
-                  className="flex-[2] btn-monochrome h-20 !rounded-[2rem] text-[10px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 justify-center italic"
+                  className="flex-[2] btn-primary w-full sm:w-auto flex items-center justify-center gap-4 px-4 py-6 rounded-xl text-[10px] font-black uppercase tracking-widest bg-[var(--nav-bg)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)] shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 active:scale-95 transition-all duration-300"
                 >
-                  <Plus size={20} strokeWidth={1.5} />
+                  <Plus className="h-5 w-5 group-hover:rotate-90 group-hover:scale-110 transition-transform duration-300" />
                   {t('course_assignment_publish')}
                 </button>
               </footer>

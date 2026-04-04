@@ -5,14 +5,14 @@ import { Loader2, ArrowUpRight } from 'lucide-react';
  * StatCard Component
  * High-fidelity glassmorphic metric card for mobile first dashboards.
  */
-export const StatCard = ({ 
-  title, 
-  value, 
-  icon: Icon, 
-  loading, 
-  Trend, 
+export const StatCard = ({
+  title,
+  value,
+  icon: Icon,
+  loading,
+  Trend,
   delayClass = '',
-  variant = 'default' 
+  variant = 'default'
 }) => {
   return (
     <div className={`animate-fade-in-up ${delayClass} h-full`}>
@@ -23,7 +23,7 @@ export const StatCard = ({
         ${variant === 'dark' ? 'bg-[var(--text-primary)] text-[var(--bg-primary)] border-none' : 'bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border-[var(--border-color)]/20 shadow-xl shadow-black/5'}
       `}>
         <div className="absolute top-0 left-0 w-32 h-32 bg-[var(--accent-primary)] opacity-[0.02] rounded-full -ml-16 -mt-16 pointer-events-none" />
-        
+
         <div className="space-y-4 md:space-y-6 flex-1 pr-4 relative z-10">
           <h3 className={`
             text-[10px] md:text-xs font-black uppercase tracking-[0.4em] italic leading-relaxed
@@ -52,7 +52,7 @@ export const StatCard = ({
 
         <div className={`
           p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] transition-all duration-700 shadow-inner group-hover:rotate-12 relative z-10
-          ${variant === 'dark' ? 'bg-white/10 text-[var(--bg-primary)]' : 'bg-[var(--bg-secondary)] text-[var(--text-primary)] group-hover:bg-[var(--accent-primary)] group-hover:text-white'}
+          ${variant === 'dark' ? 'bg-white/10 text-[var(--bg-primary)]' : 'bg-[var(--bg-secondary)] text-[var(--text-primary)] group-hover:bg-[var(--text-primary)] group-hover:text-[var(--bg-primary)]'}
         `}>
           <Icon className="h-7 md:h-12 w-7 md:w-12" />
         </div>

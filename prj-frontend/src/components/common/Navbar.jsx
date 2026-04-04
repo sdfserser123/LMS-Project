@@ -30,13 +30,13 @@ export const Navbar = () => {
                         to="/"
                         style={{ color: "black", textDecoration: "none", fontWeight: "bold" }}
                     >
-                        {t('nav_home')}
+                        {t('Home')}
                     </Link>
                     <Link
                         to="#"
                         style={{ color: "#374151", textDecoration: "none" }}
                     >
-                        {t('nav_about')}
+                        {t('About')}
                     </Link>
 
                     {/* Courses Dropdown */}
@@ -65,7 +65,7 @@ export const Navbar = () => {
                                 }
                             }}
                         >
-                            {t('nav_courses_intro')}
+                            {t('Courses info')}
                             <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M1 1L5 5L9 1" stroke="#374151" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>

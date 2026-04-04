@@ -73,33 +73,18 @@ export const CourseManagement = () => {
 
     return (
         <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen animate-fade-in-up pb-32">
-            {/* Header Area */}
-            <header className="glass-card p-10 relative overflow-hidden group mb-12 shadow-2xl">
-                <div className="absolute top-0 right-0 w-72 h-72 bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-36 -mt-36 transition-transform duration-1000 group-hover:scale-125" />
-                
-                <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-                    <div className="flex items-center gap-6">
-                        <div className="h-14 w-14 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-xl">
-                            <BookOpen className="h-6 w-6" strokeWidth={1.5} />
-                        </div>
-                        <div className="space-y-1">
-                            <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tight italic">
-                                {t('course_catalog_title').split(' ')[0]} <span className="text-[var(--accent-primary)]">{t('course_catalog_title').split(' ')[1] || ''}</span>
-                            </h2>
-                            <p className="text-[var(--text-secondary)] font-medium text-lg italic opacity-80">
-                                {t('course_catalog_subtitle')}
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <button
-                        onClick={() => navigate(user?.role === 'admin' ? '/admin/addcourse' : '/teacher/addcourse')}
-                        className="btn-primary !px-10 !py-5 text-[10px] uppercase tracking-widest group shadow-2xl"
-                    >
-                        <Plus className="h-5 w-5 group-hover:rotate-90 transition-transform duration-300" />
-                        {t('course_add_new')}
-                    </button>
+            {/* Minimal Header Action Bar */}
+            <header className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-8">
+                <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm">
+                    <BookOpen className="h-5 w-5 opacity-60" strokeWidth={1.5} />
                 </div>
+                <button
+                    onClick={() => navigate(user?.role === 'admin' ? '/admin/addcourse' : '/teacher/addcourse')}
+                    className="btn-primary w-full sm:w-auto flex items-center justify-center gap-3 !px-10 !py-5 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 group active:scale-95 transition-all duration-300 text-[10px] uppercase tracking-widest bg-[var(--nav-bg)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]"
+                >
+                    <Plus className="h-5 w-5 group-hover:rotate-90 group-hover:scale-110 transition-transform duration-300" />
+                    {t('course_add_new')}
+                </button>
             </header>
 
             {/* Table Container */}
@@ -112,25 +97,25 @@ export const CourseManagement = () => {
                 ) : (
                     <>
                         {/* Desktop View: Table */}
-                        <div className="hidden md:block overflow-x-auto">
-                        {/* Desktop View: Table (≥ md) */}
-                        <table className="hidden md:table w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="border-b border-[var(--border-color)] bg-[var(--bg-secondary)]/50 backdrop-blur-md">
-                                        <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_identity')}</th>
-                                        <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_title')}</th>
-                                        <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_status')}</th>
-                                        <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_instructor')}</th>
-                                        <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60 text-right">{t('table_operations')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-[var(--border-color)] bg-white/5">
-                                    {courses.map((c, idx) => (
-                                        <tr key={c.courseid} className="hover:bg-[var(--accent-primary)]/[0.02] transition-colors group">
-                                            <td className="px-8 py-6 whitespace-nowrap text-xs text-[var(--text-secondary)] font-black tracking-widest opacity-40">#{c.courseid}</td>
-                                            <td className="px-8 py-6 whitespace-nowrap">
+            <div className="hidden md:block overflow-x-auto custom-scrollbar">
+                {/* Desktop View: Table (≥ md) */}
+                <table className="hidden md:table w-full text-left border-collapse">
+                    <thead>
+                        <tr className="border-b border-[var(--border-color)] bg-[var(--bg-secondary)]/50 backdrop-blur-md">
+                            <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_identity')}</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_title')}</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_status')}</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60">{t('table_instructor')}</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-[var(--text-secondary)] uppercase tracking-[0.2em] opacity-60 text-right">{t('table_operations')}</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[var(--border-color)] bg-white/5">
+                        {courses.map((c, idx) => (
+                            <tr key={c.courseid} className="hover:bg-[var(--accent-primary)]/[0.02] transition-colors group">
+                                <td className="px-8 py-6 whitespace-nowrap text-xs text-[var(--text-secondary)] font-black tracking-widest opacity-40">#{c.courseid}</td>
+                                <td className="px-8 py-6">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="h-12 w-12 rounded-2xl bg-[var(--text-primary)] flex items-center justify-center text-[var(--bg-primary)] group-hover:bg-[var(--accent-primary)] transition-all duration-500 shadow-xl shadow-black/10">
+                                                    <div className="h-12 w-12 rounded-2xl bg-[var(--text-primary)] flex items-center justify-center text-[var(--bg-primary)] group-hover:bg-[var(--bg-primary)] group-hover:text-[var(--text-primary)] border border-transparent group-hover:border-[var(--text-primary)]/20 transition-all duration-500 shadow-xl shadow-black/10">
                                                         <BookOpen className="h-5 w-5" />
                                                     </div>
                                                     <div className="flex flex-col">

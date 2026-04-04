@@ -158,27 +158,18 @@ export const UserManagement = () => {
 
     return (
         <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen animate-fade-in-up pb-32">
-            <header className="glass-card p-8 md:p-12 mb-8 md:mb-12 relative overflow-hidden group shadow-2xl">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-40 -mt-40 transition-transform duration-[2000ms] group-hover:scale-125" />
-                <div className="relative z-10 flex flex-col md:flex-row justify-between items-end md:items-center gap-8">
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-4">
-                            <div className="h-14 w-14 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-xl">
-                                <Shield className="h-6 w-6" strokeWidth={1.5} />
-                            </div>
-                            <h1 className="text-3xl md:text-4xl font-medium text-[var(--text-primary)] tracking-tight italic leading-relaxed">
-                                {t('user_governance').split(' ')[0]} <span className="text-[var(--accent-primary)]">{t('user_governance').split(' ')[1]}</span>
-                            </h1>
-                        </div>
-                        <p className="text-[var(--text-secondary)] font-medium text-base md:text-lg italic opacity-80 leading-relaxed max-w-2xl">
-                            {t('portal_admin_sub')} — {t('user_add_subtitle')}
-                        </p>
-                    </div>
-                    <button onClick={() => navigate('/adduser')} className="btn-primary w-full md:w-auto !px-10 !py-4 flex items-center justify-center gap-3 shadow-2xl group active:scale-95 text-[10px] uppercase tracking-[0.2em]">
-                        <UserPlus className="h-4 w-4 group-hover:rotate-12 transition-transform" />
-                        {t('user_provision_new')}
-                    </button>
+            {/* Minimal Header Action Bar */}
+            <header className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-8">
+                <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm">
+                    <Shield className="h-5 w-5 opacity-60" strokeWidth={1.5} />
                 </div>
+                <button 
+                  onClick={() => navigate('/adduser')} 
+                  className="btn-primary w-full sm:w-auto !px-10 !py-4 flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 group active:scale-95 transition-all duration-300 text-[10px] uppercase tracking-[0.2em] bg-[var(--nav-bg)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]"
+                >
+                    <UserPlus className="h-4 w-4 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-300" />
+                    {t('user_provision_new')}
+                </button>
             </header>
 
             <div className="insta-card overflow-hidden shadow-2xl border-none">
@@ -205,7 +196,7 @@ export const UserManagement = () => {
                                         <tr key={u.userid} className="hover:bg-[var(--accent-primary)]/[0.02] transition-colors group">
                                             <td className="px-10 py-8">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="h-12 w-12 rounded-2xl bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center font-black text-lg group-hover:bg-[var(--accent-primary)] transition-all">
+                                                    <div className="h-12 w-12 rounded-2xl bg-[var(--text-primary)] text-[var(--bg-primary)] flex items-center justify-center font-black text-lg group-hover:bg-[var(--bg-primary)] group-hover:text-[var(--text-primary)] border border-transparent group-hover:border-[var(--text-primary)]/20 transition-all">
                                                         {u.fullname.charAt(0).toUpperCase()}
                                                     </div>
                                                     <div>

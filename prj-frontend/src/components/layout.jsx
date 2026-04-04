@@ -20,7 +20,7 @@ export const Layout = ({ children, user, onLogout, currentPage, onNavigate }) =>
         ];
       case UserRole.TEACHER:
         return [
-          { id: 'teacher-dashboard', label: 'My Courses', icon: 'fa-chalkboard-teacher' },
+          { id: 'teacher-dashboard', label: 'Course Management', icon: 'fa-chalkboard-teacher' },
           { id: 'teacher-create', label: 'Create Course', icon: 'fa-plus-circle' },
         ];
       case UserRole.STUDENT:

@@ -22,20 +22,18 @@ export const StudentCourses = () => {
 
     return (
         <div className="p-8 max-w-7xl mx-auto min-h-screen animate-fade-in-up">
-            <header className="mb-12 glass-card p-10 relative overflow-hidden group shadow-2xl">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent-primary)] opacity-[0.03] rounded-full -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-110" />
-                <div className="relative z-10 flex items-center gap-6">
-                    <div className="h-14 w-14 rounded-2xl bg-[var(--accent-primary)] flex items-center justify-center text-[var(--bg-primary)] shadow-xl">
-                        <BookOpen className="h-6 w-6" strokeWidth={1.5} />
-                    </div>
-                    <div className="space-y-1">
-                        <h2 className="text-4xl font-black text-[var(--text-primary)] tracking-tight">
-                            Course <span className="text-[var(--accent-primary)] italic">Library</span>
-                        </h2>
-                        <p className="text-[var(--text-secondary)] font-medium text-lg italic opacity-80">
-                            Your personalized curriculum. Continue your journey to excellence.
-                        </p>
-                    </div>
+            {/* Minimalist Portal Header */}
+            <header className="flex items-center gap-6 mb-12 md:mb-16">
+                <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm shrink-0">
+                    <BookOpen className="h-5 w-5 opacity-60" strokeWidth={1.5} />
+                </div>
+                <div className="flex flex-col">
+                    <p className="text-[var(--text-secondary)] font-medium text-lg md:text-xl italic opacity-80 leading-relaxed truncate">
+                        Course Library
+                    </p>
+                    <span className="text-[9px] font-black uppercase tracking-[0.4em] text-[var(--text-secondary)] opacity-30 italic">
+                        Scholastic Portal
+                    </span>
                 </div>
             </header>
 

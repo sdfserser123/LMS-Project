@@ -18,6 +18,7 @@ const addUser = async (req, res) => {
   try {
     const { fullname, username, email, password, role } = req.body
 
+
     // validate
     if (!fullname || !username || !email || !password || !role) {
       return res.status(400).json({ message: 'Thiếu dữ liệu' })

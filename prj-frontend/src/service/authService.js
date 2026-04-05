@@ -3,6 +3,7 @@ import { api } from "../lib/axios";
 export const authService = {
   logIn: async (username, password) => {
     console.log("LOGIN REQUEST:", { username, password });
+    username = username?.trim(); //Đề phòng có dấu cách ở đầu hoặc cuối username//
     const res = await api.post(
       "auth/login",
       { username, password },

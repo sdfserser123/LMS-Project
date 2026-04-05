@@ -15,7 +15,6 @@ const logIn = async (req, res) => {
         if (!username || !password) {
             return res.sendStatus(400);
         }
-
         const user = await User.findByUsername(username);
 
         if (!user) {

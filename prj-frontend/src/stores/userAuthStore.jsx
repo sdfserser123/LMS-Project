@@ -19,6 +19,7 @@ export const useAuthStore = create((set, get) => ({
   },
 
   logIn: async (username, password) => {
+    username = username?.trim(); //Đề phòng có dấu cách ở đầu hoặc cuối username//
     try {
       set({ loading: true })
       console.log('Đang truy cập')

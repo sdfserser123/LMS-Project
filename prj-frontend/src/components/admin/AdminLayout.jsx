@@ -170,16 +170,6 @@ export const AdminLayout = () => {
                             </div>
                         </div>
 
-                        {/* Search Bar Placeholder */}
-                        <div className="flex items-center gap-4 bg-[var(--nav-bg)]/50 border border-[var(--border-color)]/50 px-6 py-3 rounded-3xl w-full max-w-lg group">
-                            <Search className="h-4 w-4 text-[var(--text-primary)]" />
-                            <input 
-                                type="text" 
-                                placeholder={t('nav_search_placeholder') || "Execute heuristic search..."}
-                                className="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-[0.2em] w-full text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/40"
-                            />
-                        </div>
-
                         {/* Right Side Actions */}
                         <div className="flex items-center gap-4 sm:gap-8 pr-4">
                             <NotificationBell />

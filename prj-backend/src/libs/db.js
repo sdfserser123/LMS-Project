@@ -50,4 +50,39 @@ db.execute(`
   )
 `).catch(err => console.error("Error creating submissions table:", err));
 
+// --- US-18: Schema Migrations ---
+
+// Add data column to notifications
+db.execute(`
+  ALTER TABLE notifications 
+  ADD COLUMN data TEXT DEFAULT NULL
+`).catch(err => {
+  if (err.message.includes('Duplicate column name')) {
+    // console.log('data column already exists');
+  } else {
+    console.error("Error updating notifications table:", err.message);
+  }
+});
+
+// Update enrollments status
+db.execute(`
+  ALTER TABLE enrollments 
+  MODIFY COLUMN status ENUM('pending', 'enrolled') DEFAULT 'enrolled'
+`).catch(err => {
+  console.error("Error updating enrollments status:", err.message);
+});
+
+// --- US-19: Announcement System ---
+db.execute(`
+  CREATE TABLE IF NOT EXISTS announcements (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    author_id VARCHAR(50) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    status ENUM('pending', 'approved') DEFAULT 'approved',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (author_id) REFERENCES users(userid) ON DELETE CASCADE
+  )
+`).catch(err => console.error("Error creating announcements table:", err));
+
 module.exports = db;

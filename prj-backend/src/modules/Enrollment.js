@@ -56,6 +56,44 @@ const Enrollment = {
         `;
         const [rows] = await db.execute(query, [instructorId, instructorId]);
         return rows;
+    },
+    // Get all students enrolled in a specific course
+    getStudentsByCourseId: async (courseId) => {
+        const [rows] = await db.execute(
+            `SELECT u.userid, u.fullname, u.username, u.email, e.enrolled_at, e.status
+             FROM enrollments e
+             JOIN users u ON e.student_id = u.userid
+             WHERE e.course_id = ?`,
+            [courseId]
+        );
+        return rows;
+    },
+
+    // Enroll a single student into a course
+    enrollStudent: async (studentId, courseId, status = 'enrolled') => {
+        const [result] = await db.execute(
+            `INSERT IGNORE INTO enrollments (student_id, course_id, status) VALUES (?, ?, ?)`,
+            [studentId, courseId, status]
+        );
+        return result.affectedRows > 0;
+    },
+
+    // Remove a single student from a course
+    unenrollStudent: async (studentId, courseId) => {
+        const [result] = await db.execute(
+            `DELETE FROM enrollments WHERE student_id = ? AND course_id = ?`,
+            [studentId, courseId]
+        );
+        return result.affectedRows > 0;
+    },
+
+    // --- US-18: Admin Approval Logic ---
+    updateEnrollmentStatus: async (studentId, courseId, status) => {
+        await db.execute(
+            "UPDATE enrollments SET status = ? WHERE student_id = ? AND course_id = ?",
+            [status, studentId, courseId]
+        );
+        return true;
     }
 };
 

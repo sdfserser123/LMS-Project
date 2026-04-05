@@ -172,7 +172,7 @@ const assignmentController = {
             const submission = await Assignment.getSubmissionByStudent(assignment_id, student_id);
 
             if (!submission) {
-                return res.status(404).json({ message: "No submission found" });
+                return res.status(200).json(null);
             }
             res.status(200).json(submission);
         } catch (error) {

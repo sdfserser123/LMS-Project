@@ -16,12 +16,16 @@ import { useNotificationStore } from '../../stores/useNotificationStore';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useTimeAgo } from '../../hooks/useTimeAgo';
 import { showUndoToast } from '../../components/shared/UndoToast';
+import { api } from '../../lib/axios';
+import { toast } from 'sonner';
+import { useAuthStore } from '../../stores/userAuthStore';
 
 /**
  * NotificationsPage - Dedicated view for full notification management.
  * Follows strict Monochrome Minimalist guidelines.
  */
 export const NotificationsPage = () => {
+  const { user } = useAuthStore();
   const { 
     notifications, 
     loading,
@@ -49,8 +53,32 @@ export const NotificationsPage = () => {
       case 'assignment_due':
       case 'security':
         return { icon: AlertTriangle, color: 'text-zinc-900 dark:text-zinc-100' };
+      case 'enrollment_request':
+        return { icon: UserPlus, color: 'text-violet-500' };
       default:
         return { icon: Info, color: 'text-zinc-900 dark:text-zinc-100' };
+    }
+  };
+
+  // --- US-18: Admin Approval Action ---
+  const handleApprovalAction = async (notif, action) => {
+    try {
+      let data = notif.data;
+      if (typeof data === 'string') data = JSON.parse(data);
+      
+      await api.post('/enrollments/approve', {
+        studentId: data.studentId,
+        courseId: data.courseId,
+        instructorId: data.instructorId,
+        action: action,
+        notificationId: notif.id
+      });
+      
+      toast.success(action === 'approve' ? 'Enrollment approved' : 'Enrollment denied');
+      fetchNotifications(); // Refresh list
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to process approval');
     }
   };
 
@@ -149,6 +177,26 @@ export const NotificationsPage = () => {
                           {timeAgo(n.created_at)}
                         </span>
                       </div>
+
+                      {/* US-18: Admin Approval UI on Full Page */}
+                      {n.type === 'enrollment_request' && !n.is_read && user?.role === 'admin' && (
+                        <div className="flex items-center gap-3 mt-4 pt-4 border-t border-[var(--border-color)]/30 animate-in fade-in slide-in-from-top-2">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); handleApprovalAction(n, 'approve'); }}
+                            className="h-10 px-6 rounded-xl bg-violet-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-violet-700 transition-all shadow-lg shadow-violet-600/20 active:scale-95 flex items-center gap-2"
+                          >
+                            <CheckCircle2 size={14} />
+                            Approve Request
+                          </button>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); handleApprovalAction(n, 'deny'); }}
+                            className="h-10 px-6 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-primary)] text-[10px] font-black uppercase tracking-widest border border-[var(--border-color)] hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/20 transition-all active:scale-95 flex items-center gap-2"
+                          >
+                            <Trash2 size={14} />
+                            Deny
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <button 

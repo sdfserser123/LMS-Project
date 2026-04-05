@@ -8,6 +8,7 @@ const notificationRoute = require('./routes/notificationRoute.js');
 const assignmentRoute = require('./routes/assignmentRoute.js');
 const enrollmentRoute = require('./routes/enrollmentRoute.js');
 const instructorRoute = require('./routes/instructorRoute.js');
+const announcementRoute = require('./routes/announcementRoute.js');
 const dashboardRoute = require('./routes/dashboardRoute.js');
 const protectedRoute = require('./middlewares/authMiddleware.js')
 const bcrypt = require('bcrypt')
@@ -45,6 +46,7 @@ app.use('/api/assignments', protectedRoute, assignmentRoute);
 app.use('/api/enrollments', protectedRoute, enrollmentRoute);
 app.use('/api/instructor', protectedRoute, instructorRoute);
 app.use('/api/dashboard', protectedRoute, dashboardRoute);
+app.use('/api/announcements', protectedRoute, announcementRoute);
 
 //test api
 app.get('/user', async (req, res) => {

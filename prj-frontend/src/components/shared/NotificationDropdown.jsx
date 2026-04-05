@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { toast } from 'sonner';
 import { 
   BellOff, 
   CheckCircle2, 
@@ -15,6 +16,8 @@ import { useTimeAgo } from '../../hooks/useTimeAgo';
 import { showUndoToast } from './UndoToast';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/userAuthStore';
+
+import { api } from '../../lib/axios';
 
 /**
  * NotificationDropdown - Minimalist monochrome dropdown for Desktop.
@@ -49,6 +52,28 @@ export const NotificationDropdown = () => {
     navigate(getNotificationPath());
   };
 
+  // --- US-18: Admin Approval Action ---
+  const handleApprovalAction = async (notif, action) => {
+    try {
+      let data = notif.data;
+      if (typeof data === 'string') data = JSON.parse(data);
+      
+      await api.post('/enrollments/approve', {
+        studentId: data.studentId,
+        courseId: data.courseId,
+        instructorId: data.instructorId, // Pass back to notify the teacher
+        action: action,
+        notificationId: notif.id
+      });
+      
+      toast.success(action === 'approve' ? 'Enrollment approved' : 'Enrollment denied');
+      fetchNotifications(); // Refresh list
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to process approval');
+    }
+  };
+
   const getIcon = (type) => {
     switch (type) {
       case 'assignment_graded':
@@ -57,6 +82,8 @@ export const NotificationDropdown = () => {
       case 'assignment_due':
       case 'security':
         return { icon: AlertTriangle, color: 'text-zinc-900 dark:text-zinc-100' };
+      case 'enrollment_request':
+        return { icon: UserPlus, color: 'text-violet-500' };
       default:
         return { icon: Info, color: 'text-zinc-900 dark:text-zinc-100' };
     }
@@ -86,43 +113,65 @@ export const NotificationDropdown = () => {
           <ul className="divide-y divide-[var(--border-color)]/30">
             {notifications.slice(0, 20).map((n) => {
               const { icon: Icon, color } = getIcon(n.type);
+              const isApproval = n.type === 'enrollment_request' && !n.is_read && user?.role === 'admin';
+              
               return (
                 <li 
-                  key={n.id} 
-                  className={`
-                    group relative px-6 py-5 flex gap-4 transition-all duration-300
+                   key={n.id} 
+                   className={`
+                    group relative px-6 py-5 flex flex-col gap-3 transition-all duration-300
                     ${n.is_read ? 'opacity-50 grayscale-[0.5]' : 'bg-zinc-100 dark:bg-white/5'}
                   `}
                 >
-                  <div className={`mt-1 h-8 w-8 shrink-0 rounded-lg flex items-center justify-center bg-zinc-100 dark:bg-white/10 ${color}`}>
-                    <Icon size={16} strokeWidth={1.5} />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className={`text-xs leading-relaxed break-words font-medium italic ${n.is_read ? 'text-zinc-500' : 'text-zinc-900 dark:text-zinc-100'}`}>
-                      {n.message}
-                    </p>
-                    <span className="text-[9px] text-zinc-500 font-medium mt-2 block uppercase tracking-widest opacity-40">
-                      {timeAgo(n.created_at)}
-                    </span>
-                  </div>
-                  
-                  <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100">
-                    {!n.is_read && (
+                  <div className="flex gap-4">
+                    <div className={`mt-1 h-8 w-8 shrink-0 rounded-lg flex items-center justify-center bg-zinc-100 dark:bg-white/10 ${color}`}>
+                      <Icon size={16} strokeWidth={1.5} />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-xs leading-relaxed break-words font-medium italic ${n.is_read ? 'text-zinc-500' : 'text-zinc-900 dark:text-zinc-100'}`}>
+                        {n.message}
+                      </p>
+                      <span className="text-[9px] text-zinc-500 font-medium mt-2 block uppercase tracking-widest opacity-40">
+                        {timeAgo(n.created_at)}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all scale-90 group-hover:scale-100 shrink-0">
+                      {!n.is_read && !isApproval && (
+                        <button 
+                          onClick={() => markAsRead(n.id)}
+                          className="h-8 w-8 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-black transition-all flex items-center justify-center shadow-sm"
+                        >
+                          <CheckCircle2 size={14} strokeWidth={1.5} />
+                        </button>
+                      )}
                       <button 
-                        onClick={() => markAsRead(n.id)}
-                        className="h-8 w-8 rounded-lg bg-zinc-900 dark:bg-zinc-100 text-zinc-50 dark:text-black transition-all flex items-center justify-center shadow-sm"
+                        onClick={(e) => handleDelete(n.id, e)}
+                        className="h-8 w-8 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center"
                       >
-                        <CheckCircle2 size={14} strokeWidth={1.5} />
+                        <Trash2 size={14} strokeWidth={1.5} />
                       </button>
-                    )}
-                    <button 
-                      onClick={(e) => handleDelete(n.id, e)}
-                      className="h-8 w-8 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all flex items-center justify-center"
-                    >
-                      <Trash2 size={14} strokeWidth={1.5} />
-                    </button>
+                    </div>
                   </div>
+
+                  {/* Actions for Approval */}
+                  {isApproval && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <button 
+                        onClick={() => handleApprovalAction(n, 'approve')}
+                        className="flex-1 py-2 rounded-xl bg-violet-500 text-white text-[9px] font-black uppercase tracking-widest hover:bg-violet-600 transition-all shadow-sm shadow-violet-500/20"
+                      >
+                        Approve
+                      </button>
+                      <button 
+                        onClick={() => handleApprovalAction(n, 'deny')}
+                        className="flex-1 py-2 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-primary)] text-[9px] font-black uppercase tracking-widest border border-[var(--border-color)] hover:bg-[var(--border-color)] transition-all"
+                      >
+                        Deny
+                      </button>
+                    </div>
+                  )}
                 </li>
               );
             })}

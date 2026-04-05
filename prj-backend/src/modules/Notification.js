@@ -1,10 +1,10 @@
 const db = require('../libs/db.js');
 
 const Notification = {
-    insert: async (user_id, type, message) => {
+    insert: async (user_id, type, message, data = null) => {
         return await db.execute(
-            "INSERT INTO notifications (user_id, type, message) VALUES (?, ?, ?)",
-            [user_id, type, message]
+            "INSERT INTO notifications (user_id, type, message, data) VALUES (?, ?, ?, ?)",
+            [user_id, type, message, data ? JSON.stringify(data) : null]
         );
     },
     getUserNotifications: async (user_id) => {

@@ -34,6 +34,7 @@ import { TeacherAssignments } from "./pages/teacher/TeacherAssignments";
 import { TeacherStudents } from "./pages/teacher/TeacherStudents";
 import { StudentCourses } from "./pages/student/StudentCourses";
 import { NotificationsPage } from "./pages/shared/NotificationsPage";
+import { AnnouncementApproval } from "./pages/admin/AnnouncementApproval";
 
 function App() {
   const { refresh, loading } = useAuthStore();
@@ -75,6 +76,7 @@ function App() {
               <Route path="/admin/addcourse" element={<AddCoursePage />} />
               <Route path="/admin/settings" element={<Settings />} />
               <Route path="/admin/notifications" element={<NotificationsPage />} />
+              <Route path="/admin/announcements/approve" element={<AnnouncementApproval />} />
               <Route path="/adduser" element={<AddUserPage />} />
 
               {/* 1. Trang quản lý danh sách bài giảng của 1 khóa học */}

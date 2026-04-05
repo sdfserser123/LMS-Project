@@ -4,6 +4,7 @@ import { Users, Mail, BookOpen, Loader2, Search, ExternalLink, Fingerprint } fro
 import { toast } from 'sonner';
 import MobileListItem from '../../components/shared/MobileListItem';
 import { useTranslation } from '../../hooks/useTranslation';
+import StudentDossierModal from '../../components/shared/StudentDossierModal';
 
 export const TeacherStudents = () => {
     const { t } = useTranslation();
@@ -11,6 +12,13 @@ export const TeacherStudents = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const [expandedStudentId, setExpandedStudentId] = useState(null);
+    const [isDossierOpen, setIsDossierOpen] = useState(false);
+    const [selectedStudentId, setSelectedStudentId] = useState(null);
+
+    const handleViewDossier = (id) => {
+        setSelectedStudentId(id);
+        setIsDossierOpen(true);
+    };
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -99,7 +107,10 @@ export const TeacherStudents = () => {
                                                 <span>{student.course_count} {t('student_modules')}</span>
                                             </div>
                                         </div>
-                                        <button className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--accent-primary)] hover:text-[var(--bg-primary)] transition-all shadow-sm">
+                                        <button 
+                                            onClick={() => handleViewDossier(student.userid)}
+                                            className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-secondary)] hover:bg-[var(--accent-primary)] hover:text-[var(--bg-primary)] transition-all shadow-sm"
+                                        >
                                             <ExternalLink className="h-5 w-5" />
                                         </button>
                                     </div>
@@ -121,7 +132,7 @@ export const TeacherStudents = () => {
                                         {
                                             label: t('action_view_dossier'),
                                             icon: ExternalLink,
-                                            onClick: () => {},
+                                            onClick: () => handleViewDossier(student.userid),
                                             variant: 'primary'
                                         }
                                     ]}
@@ -154,6 +165,12 @@ export const TeacherStudents = () => {
                     </>
                 )}
             </div>
+            
+            <StudentDossierModal 
+                isOpen={isDossierOpen} 
+                onClose={() => setIsDossierOpen(false)} 
+                studentId={selectedStudentId} 
+            />
         </div>
     );
 };

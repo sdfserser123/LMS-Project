@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/axios';
 import { toast } from 'sonner';
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "../../type/userSchema";
-import { User, Mail, Lock, Shield, Loader2, Edit2, Trash2, UserPlus, BookOpen, X, ChevronRight, Fingerprint, Eye, EyeOff, AlertTriangle } from "lucide-react";
+import { User, Mail, Lock, Shield, Loader2, Edit2, Trash2, UserPlus, BookOpen, X, ChevronRight, Fingerprint, Eye, EyeOff, AlertTriangle, Filter, Search } from "lucide-react";
 import { DataCard } from "../../components/shared/DataCard";
 import { useTranslation } from "../../hooks/useTranslation";
 import MobileListItem from "../../components/shared/MobileListItem";
@@ -16,6 +16,10 @@ export const UserManagement = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [expandedUserId, setExpandedUserId] = useState(null);
+    const [roleFilter, setRoleFilter] = useState('all');
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
 
     // Edit Modal State
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -55,6 +59,17 @@ export const UserManagement = () => {
 
     useEffect(() => {
         fetchUsers();
+    }, []);
+
+    // Handle Click Outside Dropdown
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsRoleDropdownOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     // Open Confirmation Dialog Before Delete
@@ -152,13 +167,93 @@ export const UserManagement = () => {
         );
     };
 
+    const filteredUsers = users.filter(u => {
+        const matchesRole = roleFilter === 'all' || u.role === roleFilter;
+        const s = searchTerm.toLowerCase();
+        const matchesSearch = 
+            u.fullname.toLowerCase().includes(s) || 
+            u.username.toLowerCase().includes(s) || 
+            u.email.toLowerCase().includes(s);
+        return matchesRole && matchesSearch;
+    });
+
     return (
         <div className="p-4 md:p-8 max-w-7xl mx-auto min-h-screen animate-fade-in-up pb-32">
             {/* Minimal Header Action Bar */}
-            <header className="flex flex-col sm:flex-row justify-between items-center gap-6 mb-8">
-                <div className="h-12 w-12 rounded-xl bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-primary)] border border-[var(--border-color)] shadow-sm">
-                    <Shield className="h-5 w-5 opacity-60" strokeWidth={1.5} />
+            <header className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+                <div className="flex flex-1 items-center gap-4 w-full md:w-auto">
+                    {/* Search Bar */}
+                    <div className="relative flex-1 group/search">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] opacity-40 group-focus-within/search:opacity-100 group-focus-within/search:text-[var(--accent-primary)] transition-all">
+                            <Search className="h-4 w-4" />
+                        </div>
+                        <input 
+                            type="text"
+                            placeholder="Search users by name, email, or username..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-color)] text-xs font-medium text-[var(--text-primary)] placeholder:text-[var(--text-secondary)]/30 outline-none focus:ring-4 focus:ring-[var(--accent-primary)]/10 focus:border-[var(--accent-primary)]/50 transition-all shadow-inner"
+                        />
+                        {searchTerm && (
+                            <button 
+                                onClick={() => setSearchTerm("")}
+                                className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-lg hover:bg-[var(--bg-primary)] text-[var(--text-secondary)] opacity-40 hover:opacity-100 transition-all"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        )}
+                    </div>
+                    
+                    {/* Icon-only Role Filter Button Dropdown */}
+                    <div className="relative" ref={dropdownRef}>
+                        <button 
+                            id="groupingdropdown"
+                            type="button" 
+                            onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
+                            aria-haspopup="true" 
+                            aria-expanded={isRoleDropdownOpen} 
+                            aria-label="Grouping drop-down menu"
+                            className={`
+                                relative p-2.5 rounded-2xl transition-all duration-300 active:scale-90 shadow-lg shadow-black/10 flex items-center justify-center
+                                ${isRoleDropdownOpen || roleFilter !== 'all' 
+                                    ? 'bg-[var(--accent-primary)] text-[var(--bg-primary)] hover:opacity-90' 
+                                    : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] border border-[var(--border-color)] hover:border-[var(--accent-primary)]/40 hover:bg-[var(--bg-primary)]/40 hover:text-[var(--accent-primary)]'}
+                            `}
+                        >
+                            <Filter className={`h-6 w-6 transition-transform duration-500 ${isRoleDropdownOpen ? 'rotate-12' : ''}`} />
+                        </button>
+
+                        {/* Dropdown Menu (Floating Glass) */}
+                        {isRoleDropdownOpen && (
+                            <div className="absolute top-full left-0 mt-3 z-[100] glass-card !p-3 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-[var(--border-color)] animate-in fade-in slide-in-from-top-2 duration-200 w-64">
+                                <div className="space-y-1">
+                                    {[
+                                        { id: 'all', label: t('All') },
+                                        { id: 'admin', label: 'ADMIN' },
+                                        { id: 'instructor', label: 'TEACHER' },
+                                        { id: 'student', label: 'STUDENT' }
+                                    ].map((role) => (
+                                        <button
+                                            key={role.id}
+                                            onClick={() => {
+                                                setRoleFilter(role.id);
+                                                setIsRoleDropdownOpen(false);
+                                            }}
+                                            className={`
+                                                w-full text-left px-5 py-4 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center justify-between group/item
+                                                ${roleFilter === role.id ? 'bg-[var(--accent-primary)] text-white shadow-lg' : 'text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]'}
+                                            `}
+                                        >
+                                            {role.label}
+                                            {roleFilter === role.id && <ChevronRight className="h-4 w-4" />}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
+
                 <button 
                   onClick={() => navigate('/adduser')} 
                   className="btn-primary w-full sm:w-auto !px-10 !py-4 flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl hover:-translate-y-1 hover:scale-105 group active:scale-95 transition-all duration-300 text-[10px] uppercase tracking-[0.2em] bg-[var(--nav-bg)] text-[var(--text-primary)] border border-[var(--border-color)] hover:bg-[var(--bg-secondary)]"
@@ -189,7 +284,7 @@ export const UserManagement = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-[var(--border-color)] bg-white/5">
-                                    {users.map((u) => (
+                                    {filteredUsers.map((u) => (
                                         <tr key={u.userid} className="hover:bg-[var(--accent-primary)]/[0.02] transition-colors group">
                                             <td className="px-10 py-8">
                                                 <div className="flex items-center gap-4">
@@ -224,7 +319,7 @@ export const UserManagement = () => {
 
                         {/* Mobile Summary-to-Detail View (< md) */}
                         <div className="md:hidden">
-                            {users.map((u) => (
+                            {filteredUsers.map((u) => (
                                 <MobileListItem
                                     key={u.userid}
                                     title={u.fullname}

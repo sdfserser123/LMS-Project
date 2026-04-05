@@ -1,5 +1,7 @@
 const User = require('../modules/User')
 const ActivityLog = require('../modules/ActivityLog')
+const Enrollment = require('../modules/Enrollment')
+const Assignment = require('../modules/Assignment')
 
 const authMe = async (req, res) => {
   try {
@@ -178,6 +180,35 @@ const updateProfile = async (req, res) => {
   }
 }
 
+const getStudentDossier = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // 1. Get student basic info
+    const student = await User.findById(id);
+    if (!student) {
+      return res.status(404).json({ message: 'Không tìm thấy sinh viên' });
+    }
+    delete student.password;
+
+    // 2. Get enrolled courses
+    const enrollments = await Enrollment.getByStudentId(id);
+
+    // 3. Get all assignments and submissions
+    const assignments = await Assignment.getByStudent(id);
+
+    return res.status(200).json({
+      profile: student,
+      courses: enrollments,
+      assignments: assignments
+    });
+
+  } catch (error) {
+    console.error('Error fetching student dossier:', error);
+    return res.status(500).json({ message: 'Lỗi hệ thống' });
+  }
+}
+
 module.exports = {
   authMe,
   addUser,
@@ -186,5 +217,6 @@ module.exports = {
   getAllUsers,
   getLogs,
   test,
-  updateProfile
+  updateProfile,
+  getStudentDossier
 }

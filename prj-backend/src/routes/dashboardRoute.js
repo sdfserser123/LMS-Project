@@ -3,7 +3,7 @@ const router = express.Router();
 const { getDashboardSummary } = require("../controllers/dashboardController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
-// Universal Summary Route (Role-Aware via JWT)
-router.get("/summary", authMiddleware, getDashboardSummary);
+// Universal Summary Route
+router.get("/summary", getDashboardSummary);
 
 module.exports = router;

@@ -23,7 +23,7 @@ export const Input = React.forwardRef(({
 
       <div className="relative group/input">
         {Icon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] opacity-50 h-5 w-5 shrink-0 flex items-center justify-center group-focus-within/input:text-[var(--accent-primary)] group-focus-within/input:opacity-100 transition-colors pointer-events-none">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-black h-5 w-5 shrink-0 flex items-center justify-center group-focus-within/input:text-[var(--accent-primary)] transition-colors pointer-events-none">
             <Icon size={20} strokeWidth={1.5} className="shrink-0" />
           </div>
         )}

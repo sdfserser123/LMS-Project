@@ -287,14 +287,7 @@ export const LessonLayout = () => {
                       </div>
                     )}
 
-                    {block.type === 'google_drive' && (
-                      <div className="space-y-6">
-                        <GoogleDriveBlock 
-                          data={JSON.parse(block.value)} 
-                          isEditMode={isEditMode} 
-                        />
-                      </div>
-                    )}
+
                   </div>
                 </div>
               </div>
@@ -354,60 +347,5 @@ export const LessonLayout = () => {
         </div>
       </section>
     </article>
-  );
-};
-
-const GoogleDriveBlock = ({ data, isEditMode }) => {
-  const isEmbeddable = data.mimeType.includes('pdf') || 
-                       data.mimeType.includes('video') || 
-                       data.mimeType.includes('google-apps');
-  
-  if (isEditMode) {
-    return (
-      <div className="bg-[var(--bg-primary)]/30 border-2 border-[var(--border-color)] rounded-[2.5rem] p-8 flex items-center gap-6 shadow-inner hover:border-[var(--accent-primary)] transition-all">
-        <div className="h-16 w-16 rounded-2xl bg-white flex items-center justify-center shadow-sm shrink-0">
-          <img src={data.iconUrl || "https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png"} alt="Drive Icon" className="h-8 w-8" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-lg font-bold text-[var(--text-primary)] truncate">{data.name}</p>
-          <p className="text-xs font-black uppercase tracking-widest text-[var(--accent-primary)] mt-1">Google Drive Asset</p>
-        </div>
-        <a href={data.url} target="_blank" rel="noreferrer" className="px-6 py-3 rounded-xl bg-[var(--bg-secondary)] text-[var(--text-primary)] font-black text-[10px] uppercase tracking-widest hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] transition-all shadow-sm">
-          Open in Drive
-        </a>
-      </div>
-    );
-  }
-
-  return (
-    <div className="group/drive relative w-full">
-      {isEmbeddable ? (
-        <div className="rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl border-[8px] md:border-[16px] border-[var(--bg-primary)]/40 aspect-video bg-white relative">
-          <iframe 
-            src={data.embedUrl || data.url.replace('/view', '/preview')} 
-            className="absolute inset-0 w-full h-full border-none"
-            allow="autoplay"
-            title={data.name}
-          ></iframe>
-        </div>
-      ) : (
-        <div className="bg-[var(--bg-secondary)]/30 border border-[var(--border-color)] rounded-[2.5rem] p-10 flex items-center gap-8 group-hover/drive:bg-[var(--bg-secondary)]/50 transition-all">
-          <div className="h-20 w-20 rounded-3xl bg-white flex items-center justify-center shadow-xl">
-            <img src={data.iconUrl} alt="File" className="h-10 w-10" />
-          </div>
-          <div className="space-y-2">
-            <h4 className="text-2xl font-bold text-[var(--text-primary)]">{data.name}</h4>
-            <a 
-              href={data.url} 
-              target="_blank" 
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-[var(--accent-primary)] font-black text-xs uppercase tracking-widest hover:underline"
-            >
-              Open External Document <Plus className="h-4 w-4" />
-            </a>
-          </div>
-        </div>
-      )}
-    </div>
   );
 };

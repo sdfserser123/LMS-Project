@@ -1,25 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { courseService } from "../../service/courseService";
+import { api } from "../../lib/axios";
 import { toast } from "sonner";
 import { useAuthStore } from "../../stores/userAuthStore";
-import { BookOpen, CheckCircle, Plus, LayoutDashboard, Loader2, ArrowUpRight, GraduationCap, Users } from "lucide-react";
+import { BookOpen, CheckCircle, Plus, LayoutDashboard, Loader2, ArrowUpRight, GraduationCap, Users, Zap, Activity } from "lucide-react";
 import { useTranslation } from "../../hooks/useTranslation";
 import { StatCard } from "../../components/shared/StatCard";
 import { MobileDashboard } from "../shared/MobileDashboard";
+import { AnnouncementWriter } from "../../components/dashboard/AnnouncementWriter";
+import { AnnouncementList } from "../../components/dashboard/AnnouncementList";
 
 export const TeacherDashboard = () => {
     const [courses, setCourses] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
+    const [loadingAnnouncements, setLoadingAnnouncements] = useState(true);
     const [loading, setLoading] = useState(true);
     const { user } = useAuthStore();
     const { t } = useTranslation();
     const navigate = useNavigate();
+
+    const fetchAnnouncements = async () => {
+        setLoadingAnnouncements(true);
+        try {
+            const res = await api.get('/announcements');
+            setAnnouncements(res.data);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoadingAnnouncements(false);
+        }
+    };
 
     useEffect(() => {
         const loadData = async () => {
             try {
                 const data = await courseService.getAllCourses();
                 setCourses(data);
+                await fetchAnnouncements();
             } catch (error) {
                 toast.error(t('alert_error'));
             } finally {
@@ -103,91 +121,64 @@ export const TeacherDashboard = () => {
                 </div>
             </section>
 
-            {/* My Curricula Content Section */}
-            <section className="space-y-8 md:space-y-12 animate-fade-in-up stagger-4">
-                <div className="flex flex-col md:flex-row items-baseline justify-between gap-4 md:px-2">
-                    <div className="space-y-2">
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-black text-[var(--text-primary)] tracking-tight italic">{t('dash_my_courses')}</h3>
-                        <p className="text-[10px] md:text-xs font-black text-[var(--text-secondary)] uppercase tracking-[0.4em] opacity-50 italic">
-                            {t('dash_manage_curriculum_sub') || "SYNCHRONIZING ACADEMIC ASSETS"}
-                        </p>
-                    </div>
-                    <div className="h-px flex-1 mx-0 md:mx-10 bg-[var(--border-color)] opacity-20 w-full md:w-auto"></div>
+            {/* Content Split: Announcements & My Curricula */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 md:gap-20 mb-24">
+                <div className="lg:col-span-2 space-y-16">
+                    <section className="space-y-8 md:space-y-12">
+                         <div className="flex flex-col md:flex-row items-baseline justify-between gap-4 md:px-2">
+                            <div className="space-y-2">
+                                <h3 className="text-3xl md:text-4xl font-black text-[var(--text-primary)] tracking-tight italic">{t('dash_my_courses')}</h3>
+                            </div>
+                            <div className="h-px flex-1 mx-0 md:mx-10 bg-[var(--border-color)] opacity-20 w-full md:w-auto"></div>
+                        </div>
+
+                         {loading ? (
+                            <div className="py-24 md:py-40 flex flex-col items-center justify-center glass-card border-dashed border-2 bg-white/5">
+                                <Loader2 className="h-16 w-16 animate-spin text-[var(--accent-primary)] mb-6" />
+                            </div>
+                        ) : courses.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                                {courses.map((course, idx) => (
+                                    <div key={course.courseid} className={`animate-fade-in-up stagger-${(idx % 4) + 1}`}>
+                                        <article
+                                            className="insta-card p-6 md:p-10 group cursor-pointer flex flex-col h-full active:scale-[0.98] transition-all hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] border-transparent hover:border-[var(--accent-primary)]/20"
+                                            onClick={() => navigate(`/teacher/lessons/${course.courseid}`)}
+                                        >
+                                             <div className="flex justify-between items-start mb-10 md:mb-12">
+                                                <span className={`
+                                                    px-4 md:px-5 py-2 rounded-2xl text-[10px] font-black tracking-widest uppercase border shadow-sm backdrop-blur-md
+                                                    ${course.status === 'approved'
+                                                        ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                                                        : 'bg-amber-500/10 text-amber-500 border-amber-500/20'}
+                                                `}>
+                                                    {course.status === 'approved' ? t('status_approved') : t('status_pending')}
+                                                </span>
+                                            </div>
+                                            <h4 className="text-2xl font-black text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors leading-[1.1] italic tracking-tight mb-4">
+                                                {course.title}
+                                            </h4>
+                                            <p className="text-xs text-[var(--text-secondary)] font-medium line-clamp-2 italic opacity-70 leading-relaxed mb-8">
+                                                {course.description}
+                                            </p>
+                                            <div className="pt-6 border-t border-[var(--border-color)] flex items-center justify-between">
+                                                <span className="text-[9px] font-black uppercase tracking-widest text-[var(--text-secondary)] opacity-40">Manage Asset</span>
+                                                <ArrowUpRight className="h-5 w-5 text-[var(--text-secondary)] opacity-20 group-hover:opacity-100 group-hover:text-[var(--accent-primary)] transition-all" />
+                                            </div>
+                                        </article>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : null}
+                    </section>
                 </div>
 
-                {loading ? (
-                    <div className="py-24 md:py-40 flex flex-col items-center justify-center glass-card border-dashed border-2 bg-white/5">
-                        <Loader2 className="h-16 w-16 animate-spin text-[var(--accent-primary)] mb-6" />
-                        <p className="text-[var(--text-secondary)] font-black uppercase tracking-widest md:text-sm animate-pulse">{t('dash_teaching_sync') || "SYNCHRONIZING..."}</p>
-                    </div>
-                ) : courses.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
-                        {courses.map((course, idx) => (
-                            <div
-                                key={course.courseid}
-                                className={`animate-fade-in-up stagger-${(idx % 4) + 1} h-full`}
-                            >
-                                <article
-                                    className="insta-card p-6 md:p-10 group cursor-pointer flex flex-col h-full active:scale-[0.98] transition-all hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.15)] border-transparent hover:border-[var(--accent-primary)]/20"
-                                    onClick={() => navigate(`/teacher/lessons/${course.courseid}`)}
-                                    role="button"
-                                    tabIndex={0}
-                                    onKeyDown={(e) => e.key === 'Enter' && navigate(`/teacher/lessons/${course.courseid}`)}
-                                    aria-label={`${t('course_manage_aria') || "Manage curriculum"}: ${course.title}`}
-                                >
-                                    <div className="flex justify-between items-start mb-10 md:mb-12">
-                                        <span className={`
-                                            px-4 md:px-5 py-2 rounded-2xl text-[10px] font-black tracking-widest uppercase border shadow-sm backdrop-blur-md
-                                            ${course.status === 'approved'
-                                                ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 shadow-emerald-500/5'
-                                                : 'bg-amber-500/10 text-amber-500 border-amber-500/20 shadow-amber-500/5'}
-                                        `}>
-                                            {course.status === 'approved' ? t('status_approved') : t('status_pending')}
-                                        </span>
-                                        <span className="text-[10px] font-black text-[var(--text-secondary)] opacity-30 tracking-[0.2em] font-mono">#{course.courseid}</span>
-                                    </div>
-
-                                    <div className="space-y-4 md:space-y-6 flex-1 mb-10 md:mb-12">
-                                        <h4 className="text-2xl md:text-3xl font-black text-[var(--text-primary)] group-hover:text-[var(--accent-primary)] transition-colors leading-[1.1] italic tracking-tight">
-                                            {course.title}
-                                        </h4>
-                                        <p className="text-sm md:text-base text-[var(--text-secondary)] font-medium line-clamp-3 italic opacity-70 leading-relaxed hyphens-auto break-words">
-                                            {course.description || t('course_empty_teacher_sub')}
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center justify-between pt-8 md:pt-10 border-t border-[var(--border-color)] group-hover:border-[var(--accent-primary)]/20 transition-all duration-700">
-                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[var(--text-secondary)] group-hover:text-[var(--accent-primary)] transition-colors italic">
-                                            {t('course_manage')}
-                                        </span>
-                                        <div className="h-12 md:h-14 w-12 md:w-14 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-secondary)] group-hover:bg-[var(--accent-primary)] group-hover:text-white transition-all duration-500 shadow-inner group-hover:rotate-12">
-                                            <ArrowUpRight className="h-7 md:h-8 w-7 md:w-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                        </div>
-                                    </div>
-                                </article>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="glass-card p-16 md:p-32 text-center flex flex-col items-center bg-white/5 border-dashed border-2 transition-all hover:bg-white/10 group">
-                        <div className="w-20 md:w-28 h-20 md:h-28 bg-[var(--bg-secondary)] rounded-[2.5rem] md:rounded-[3rem] flex items-center justify-center mb-10 shadow-inner group-hover:scale-110 transition-transform duration-700">
-                            <BookOpen className="h-10 md:h-14 w-10 md:w-14 text-[var(--text-secondary)] opacity-10" />
-                        </div>
-                        <h3 className="text-3xl md:text-5xl font-black text-[var(--text-primary)] mb-6 tracking-tighter italic">{t('course_empty_teacher')}</h3>
-                        <p className="text-[var(--text-secondary)] text-base md:text-xl max-w-lg mb-12 font-medium italic opacity-60 leading-relaxed">
-                            {t('course_empty_teacher_sub')}
-                        </p>
-                        <button
-                            onClick={() => navigate("/teacher/addcourse")}
-                            aria-label={t('course_create_aria') || "Initialize first curriculum"}
-                            className="btn-primary !px-12 md:!px-16 py-5 md:py-6 text-[10px] md:text-xs font-black uppercase tracking-widest shadow-3xl active:scale-95 transition-all"
-                        >
-                            {t('course_create')}
-                        </button>
-                    </div>
-                )}
-            </section>
-        </main>
+                <div className="space-y-12">
+                    <AnnouncementWriter onPublished={fetchAnnouncements} />
+                    <AnnouncementList announcements={announcements} loading={loadingAnnouncements} />
+                </div>
+            </div>
+            </main>
         </div>
     );
 };
+

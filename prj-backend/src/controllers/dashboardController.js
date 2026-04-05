@@ -8,9 +8,18 @@ const getDashboardSummary = async (req, res) => {
   const { userid, role } = req.user;
 
   try {
+    // Universal activity feed (max 5 items)
+    const [latestAnnouncements] = await db.execute(`
+      SELECT a.id, 'announcement' as type, a.title as message, a.created_at, u.fullname as author
+      FROM announcements a
+      JOIN users u ON a.author_id = u.userid
+      WHERE a.status = 'approved'
+      ORDER BY a.created_at DESC LIMIT 5
+    `);
+
     let summary = {
       role,
-      activity: [] // Universal activity feed (max 3 items)
+      activity: latestAnnouncements
     };
 
     if (role === 'student') {
@@ -36,11 +45,6 @@ const getDashboardSummary = async (req, res) => {
         courseCount: coursesCount[0].count,
         nextDeadline: deadlines[0] || null
       };
-
-      summary.activity = [
-        { id: 1, type: 'announcement', message: 'New curriculum update available.' },
-        { id: 2, type: 'grade', message: 'Final grade published for Economics 101.' }
-      ];
 
     } else if (role === 'instructor') {
       // 1. Pending Evaluations (Using assignment_submissions table defined in db.js)
@@ -68,11 +72,6 @@ const getDashboardSummary = async (req, res) => {
         todaySchedule: '14:00 - Advanced Research Lab'
       };
 
-      summary.activity = [
-        { id: 1, type: 'submission', message: 'New submissions awaiting review.' },
-        { id: 2, type: 'system', message: 'Infrastructure integrity verified.' }
-      ];
-
     } else if (role === 'admin') {
       // 1. System Stats
       const [usersCount] = await db.execute("SELECT COUNT(*) as count FROM users");
@@ -83,11 +82,6 @@ const getDashboardSummary = async (req, res) => {
         pendingApprovals: pendingCourses[0].count,
         systemStatus: 'NOMINAL'
       };
-
-      summary.activity = [
-        { id: 1, type: 'security', message: 'System-wide firewall update complete.' },
-        { id: 2, type: 'audit', message: 'Automated database prune successful.' }
-      ];
     }
 
     return res.status(200).json(summary);

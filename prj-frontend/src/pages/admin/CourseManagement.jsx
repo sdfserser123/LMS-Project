@@ -26,6 +26,7 @@ export const CourseManagement = () => {
     const [addStudentSearch, setAddStudentSearch] = useState('');
     const [enrollingId, setEnrollingId] = useState(null);
     const [removingId, setRemovingId] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
     // --- US-ASSIGN: Instructor Assignment State ---
     const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);

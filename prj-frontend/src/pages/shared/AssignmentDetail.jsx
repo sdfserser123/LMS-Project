@@ -100,6 +100,14 @@ export const AssignmentDetail = () => {
         }
     };
 
+    const getGradeColor = (score) => {
+        const s = Number(score);
+        if (s < 30) return 'text-red-500';
+        if (s < 50) return 'text-orange-500';
+        if (s < 80) return 'text-blue-500';
+        return 'text-emerald-500'; // Xanh lá (emerald) cho 80-100
+    };
+
     if (loading) return (
         <div className="flex flex-col items-center justify-center min-h-screen animate-fade-in">
             <div className="relative h-20 w-20 mb-8">
@@ -202,7 +210,7 @@ export const AssignmentDetail = () => {
                         </div>
 
                         {mySubmission?.status === 'graded' ? (
-                            <div className="insta-card p-10 bg-[var(--text-primary)] text-[var(--bg-primary)] border-none relative overflow-hidden group">
+                            <div className="insta-card p-10 bg-[var(--text-primary)] border-none relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32" />
                                 <div className="relative z-10 flex flex-col md:flex-row gap-10 items-start md:items-center">
                                     <div className="flex-1 space-y-6">
@@ -210,12 +218,19 @@ export const AssignmentDetail = () => {
                                             <CheckCircle className="h-3 w-3" /> {t('assign_eval_complete')}
                                         </div>
                                         <div className="flex items-baseline gap-3">
-                                            <span className="text-7xl font-black tracking-tighter italic">{mySubmission.grade}</span>
-                                            <span className="text-xl font-bold opacity-40">/ 100</span>
+                                            {/* Phần số điểm chính */}
+                                            <span className={`text-7xl font-black tracking-tighter italic transition-colors duration-500 ${getGradeColor(mySubmission.grade)}`}>
+                                                {mySubmission.grade}
+                                            </span>
+                                            
+                                            {/* Phần "/ 100" */}
+                                            <span className="text-xl font-bold text-black]">
+                                                / 100
+                                            </span>
                                         </div>
                                         <div className="space-y-2">
-                                            <span className="text-[10px] font-black uppercase tracking-widest opacity-40">{t('label_feedback')}</span>
-                                            <p className="text-lg font-medium italic opacity-90 leading-relaxed border-l-2 border-white/20 pl-6">
+                                            <span className="text-[10px] font-black uppercase tracking-widest">{t('label_feedback')}</span>
+                                            <p className="text-lg font-medium italic leading-relaxed border-l-2 border-white/20 pl-6">
                                                 "{mySubmission.feedback || t('assign_def_feedback')}"
                                             </p>
                                         </div>
@@ -554,7 +569,7 @@ export const AssignmentDetail = () => {
                                         value={gradeFeedback}
                                         onChange={(e) => setGradeFeedback(e.target.value)}
                                         placeholder={t('assign_place_eval_note')}
-                                        className="w-full h-32 px-8 py-6 rounded-3xl border border-[var(--border-color)] bg-white/5 focus:bg-white/10 focus:ring-4 focus:ring-[var(--accent-primary)]/20 outline-none transition-all text-base font-medium text-[var(--text-primary)] italic resize-none custom-scrollbar"
+                                        className="w-full h-32 px-8 py-6 rounded-3xl border border-[var(--border-color)]  focus:ring-4 focus:ring-[var(--accent-primary)]/20 outline-none transition-all text-base font-medium text-[var(--text-primary)] italic resize-none custom-scrollbar"
                                     />
                                 </div>
                             </div>

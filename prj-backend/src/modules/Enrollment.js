@@ -94,6 +94,15 @@ const Enrollment = {
             [status, studentId, courseId]
         );
         return true;
+    },
+
+    // Check if a student is enrolled in a course
+    isEnrolled: async (studentId, courseId) => {
+        const [rows] = await db.execute(
+            "SELECT 1 FROM enrollments WHERE student_id = ? AND course_id = ? AND status = 'enrolled'",
+            [studentId, courseId]
+        );
+        return rows.length > 0;
     }
 };
 

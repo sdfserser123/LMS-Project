@@ -1,4 +1,5 @@
 const Course = require('../modules/Course');
+const Enrollment = require('../modules/Enrollment');
 const db = require('../libs/db.js');
 
 const createCourse = async (req, res) => {
@@ -161,6 +162,14 @@ const getLessonDetail = async (req, res) => {
             }
         }
 
+        // Verify enrollment for students
+        if (req.user.role === 'student') {
+            const isEnrolled = await Enrollment.isEnrolled(req.user.userid, lesson.course_id);
+            if (!isEnrolled) {
+                return res.status(403).json({ message: "Bạn chưa đăng ký khóa học này" });
+            }
+        }
+
         // Parse content từ String thành JSON trước khi gửi về Client
         if (typeof lesson.content === 'string') {
             lesson.content = JSON.parse(lesson.content);
@@ -214,6 +223,14 @@ const getCourseContent = async (req, res) => {
             }
         }
 
+        // Verify enrollment for students
+        if (req.user.role === 'student') {
+            const isEnrolled = await Enrollment.isEnrolled(req.user.userid, courseid);
+            if (!isEnrolled) {
+                return res.status(403).json({ message: "Bạn chưa đăng ký khóa học này" });
+            }
+        }
+
         const lessons = await Course.getLessonsByCourse(courseid);
         res.json(lessons);
     } catch (error) {
@@ -228,6 +245,15 @@ const getCourseDetail = async (req, res) => {
         if (!course) {
             return res.status(404).json({ message: "Không tìm thấy khóa học" });
         }
+
+        // Verify enrollment for students
+        if (req.user.role === 'student') {
+            const isEnrolled = await Enrollment.isEnrolled(req.user.userid, courseid);
+            if (!isEnrolled) {
+                return res.status(403).json({ message: "Bạn chưa đăng ký khóa học này" });
+            }
+        }
+
         res.json(course);
     } catch (error) {
         res.status(500).json({ message: "Lỗi lấy chi tiết khóa học" });
@@ -236,7 +262,6 @@ const getCourseDetail = async (req, res) => {
 
 const getMyEnrolledCourses = async (req, res) => {
     try {
-        const Enrollment = require('../modules/Enrollment');
         const studentId = req.user.userid;
         const enrollments = await Enrollment.getByStudentId(studentId);
         

@@ -1,19 +1,25 @@
 const mysql = require('mysql2');
 require("dotenv").config()
 
+const dbHost = process.env.DB_HOST || process.env.MYSQLHOST;
+const dbUser = process.env.DB_USER || process.env.MYSQLUSER;
+const dbPassword = process.env.DB_PASSWORD || process.env.MYSQLPASSWORD;
+const dbDatabase = process.env.DB_NAME || process.env.MYSQLDATABASE || process.env.MYSQL_DATABASE;
+const dbPort = process.env.DB_PORT || process.env.MYSQLPORT;
+
 console.log("Database connection details:", {
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  host: dbHost,
+  user: dbUser,
+  database: dbDatabase,
+  port: dbPort
 });
 
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  host: dbHost,
+  user: dbUser,
+  password: dbPassword,
+  database: dbDatabase,
+  port: dbPort
 }).promise();
 
 db.execute(`

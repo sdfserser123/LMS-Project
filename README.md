@@ -81,6 +81,7 @@ LMS-Project/
    ```bash
    cp .env.example .env
    ```
+   *Note: Ensure you configure `MASTER_USERNAME` and `MASTER_PASSWORD`. On startup, if the database doesn't have an administrator user, the backend will automatically seed one using these credentials.*
 4. Start the server:
    ```bash
    npm run dev

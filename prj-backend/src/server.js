@@ -30,8 +30,25 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 app.use(cookieParser())
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    'http://localhost:5173'
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        if (origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+        
+        return callback(null, false);
+    },
     credentials: true,
 }))
 

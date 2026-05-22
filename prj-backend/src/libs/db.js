@@ -175,4 +175,54 @@ db.execute(`
   )
 `).catch(err => console.error("Error creating activity_logs table:", err));
 
-module.exports = db;
+// --- Auto-Seed Admin Account ---
+const bcrypt = require('bcrypt');
+
+async function seedAdmin() {
+  try {
+    const username = process.env.MASTER_USERNAME || 'admin';
+    const password = process.env.MASTER_PASSWORD || '123456';
+    
+    const [users] = await db.query("SELECT * FROM users WHERE username = ?", [username]);
+    if (users.length === 0) {
+      console.log(`Admin user "${username}" not found. Seeding admin user...`);
+      const hashPassword = await bcrypt.hash(password, 10);
+      
+      const year = String(new Date().getFullYear()).slice(-2);
+      const [rows] = await db.execute(
+        'SELECT userid FROM users WHERE role = ? ORDER BY created_at DESC LIMIT 1',
+        ['admin']
+      );
+      
+      let nextNumber = 1;
+      if (rows.length > 0) {
+        const lastId = rows[0].userid;
+        if (lastId && lastId.length >= 8) {
+          const lastNumberStr = lastId.slice(4);
+          nextNumber = parseInt(lastNumberStr, 10) + 1;
+          if (isNaN(nextNumber)) nextNumber = 1;
+        }
+      }
+      const userid = 'AD' + year + String(nextNumber).padStart(4, '0');
+      
+      await db.execute(`
+        INSERT INTO users (userid, fullname, username, email, password, role)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `, [userid, 'System Administrator', username, 'admin@lms.com', hashPassword, 'admin']);
+      console.log(`Admin user "${username}" seeded successfully with ID: ${userid}!`);
+    } else {
+      console.log(`Admin user "${username}" already exists.`);
+    }
+  } catch (err) {
+    if (err.message && err.message.includes("Table 'railway.users' doesn't exist")) {
+      console.log("Users table does not exist yet. Skipping admin seeding.");
+    } else {
+      console.error("Error seeding admin user:", err);
+    }
+  }
+}
+
+// Trigger seeding 3 seconds after startup to ensure tables are ready
+setTimeout(seedAdmin, 3000);
+
+module.exports = db;

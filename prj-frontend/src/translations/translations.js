@@ -214,6 +214,7 @@ export const translations = {
     alert_score_required: "Please enter a score.",
     alert_grade_success: "Graded successfully!",
     alert_grade_error: "Error while grading",
+    alert_invalid_grade_range: "Grade must be between 0 and 100",
     alert_delete_lesson_success: "Lesson deleted successfully",
     alert_delete_assignment_success: "Assignment deleted successfully",
     delete_lesson_confirm: "Are you sure you want to delete this lesson? This action cannot be undone.",
@@ -590,6 +591,7 @@ export const translations = {
     alert_score_required: "Vui lòng nhập điểm.",
     alert_grade_success: "Đã chấm điểm thành công!",
     alert_grade_error: "Lỗi khi chấm điểm",
+    alert_invalid_grade_range: "Điểm số phải nằm trong khoảng từ 0 đến 100",
     alert_delete_lesson_success: "Đã xóa bài giảng thành công",
     alert_delete_assignment_success: "Đã xóa bài tập thành công",
     delete_lesson_confirm: "Bạn có chắc chắn muốn xóa bài giảng này không? Hành động này không thể hoàn tác.",
@@ -658,7 +660,7 @@ export const translations = {
     assign_label_eval_note: "Ghi chú đánh giá của giảng viên",
     assign_place_eval_note: "Cung cấp phản hồi chuyên môn để định hướng học giả...",
     assign_action_abandon_rev: "Hủy bỏ",
-    assign_action_commemorate: "Save",
+    assign_action_commemorate: "Ghi nhận Điểm số & Nhận xét",
     
     // User & Identity
     label_full_name: "Họ và tên pháp lý",

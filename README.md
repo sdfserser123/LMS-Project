@@ -77,13 +77,9 @@ LMS-Project/
    ```bash
    npm install
    ```
-3. Configure your `.env` file:
-   ```env
-   DB_HOST=localhost
-   DB_USER=your_user
-   DB_PASSWORD=your_password
-   DB_NAME=test_database
-   ACCESS_TOKEN_SECRET=your_jwt_secret
+3. Configure your `.env` file by copying the template and updating the values:
+   ```bash
+   cp .env.example .env
    ```
 4. Start the server:
    ```bash
@@ -96,7 +92,11 @@ LMS-Project/
    ```bash
    npm install
    ```
-3. Start the development server:
+3. Configure your `.env` file by copying the template and updating the values:
+   ```bash
+   cp .env.example .env
+   ```
+4. Start the development server:
    ```bash
    npm run dev
    ```

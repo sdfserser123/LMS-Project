@@ -74,6 +74,15 @@ const assignmentController = {
     getAssignments: async (req, res) => {
         try {
             const { course_id } = req.params;
+
+            // Verify enrollment for students
+            if (req.user.role === 'student') {
+                const isEnrolled = await Enrollment.isEnrolled(req.user.userid, course_id);
+                if (!isEnrolled) {
+                    return res.status(403).json({ message: "Bạn chưa đăng ký khóa học này" });
+                }
+            }
+
             const assignments = await Assignment.getByCourse(course_id);
             res.status(200).json(assignments);
         } catch (error) {
@@ -137,6 +146,11 @@ const assignmentController = {
 
             if (req.user.role === 'student') {
                 return res.status(403).json({ message: "Only instructors can grade" });
+            }
+
+            const numericGrade = Number(grade);
+            if (isNaN(numericGrade) || numericGrade < 0 || numericGrade > 100) {
+                return res.status(400).json({ message: "Grade must be between 0 and 100" });
             }
 
             await Assignment.gradeSubmission(submission_id, grade, feedback);

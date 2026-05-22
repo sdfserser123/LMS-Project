@@ -40,7 +40,7 @@ const StudentCourseView = ({ courseId }) => {
         {currentLesson.video_url && (
           <div className="aspect-video bg-black rounded-lg overflow-hidden mb-6">
             <ReactPlayer 
-              url={`http://localhost:5001${currentLesson.video_url}`} 
+              url={`${import.meta.env.VITE_API_URL || "http://localhost:5001"}${currentLesson.video_url}`} 
               controls 
               width="100%" 
               height="100%"
@@ -62,7 +62,7 @@ const StudentCourseView = ({ courseId }) => {
               {JSON.parse(currentLesson.attachments).map((file, i) => (
                 <li key={i}>
                   <a 
-                    href={`http://localhost:5001${file.url}`} 
+                    href={`${import.meta.env.VITE_API_URL || "http://localhost:5001"}${file.url}`} 
                     download 
                     className="text-blue-600 hover:underline"
                   >

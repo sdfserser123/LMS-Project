@@ -130,7 +130,7 @@ export const AnnouncementList = ({ announcements = [], loading = false, limit = 
                                     <div className="flex flex-col">
                                         <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Appendix Attached</span>
                                         <a 
-                                            href={`http://localhost:5001${ann.file_url}`} 
+                                            href={`${import.meta.env.VITE_API_URL || "http://localhost:5001"}${ann.file_url}`} 
                                             onClick={(e) => e.stopPropagation()}
                                             download
                                             className="text-xs font-bold text-[var(--text-primary)] hover:text-[var(--accent-primary)] transition-colors underline decoration-[var(--accent-primary)]/20 underline-offset-4"

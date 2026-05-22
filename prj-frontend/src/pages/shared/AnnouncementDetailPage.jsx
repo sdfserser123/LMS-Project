@@ -128,7 +128,7 @@ const AnnouncementDetailPage = () => {
                             <div className="pt-12 border-t border-[var(--border-color)]/20">
                                 <h4 className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40 mb-8 italic">Attached Protocol Documentation</h4>
                                 <a 
-                                    href={`http://localhost:5001${announcement.file_url}`} 
+                                    href={`${import.meta.env.VITE_API_URL || "http://localhost:5001"}${announcement.file_url}`} 
                                     download
                                     className="inline-flex items-center gap-6 p-8 rounded-3xl bg-[var(--text-primary)]/5 border border-[var(--border-color)] group/dl hover:border-[var(--accent-primary)] transition-all"
                                 >

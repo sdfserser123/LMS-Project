@@ -499,7 +499,7 @@ export const CourseLayout = () => {
 
       {/* Assignment Creation Modal - Strict Monochrome */}
       {isAssignmentModalOpen && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4 md:p-10 animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-10 animate-fade-in">
           <div ref={modalRef} className="bg-[var(--bg-primary)] p-8 md:p-16 w-full max-w-3xl max-h-[90vh] shadow-2xl relative overflow-y-auto rounded-[2.5rem] border border-[var(--border-color)]">
             
             <button 

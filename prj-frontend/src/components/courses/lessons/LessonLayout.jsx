@@ -23,6 +23,16 @@ import { useTranslation } from "../../../hooks/useTranslation";
 import { ConfirmModal } from "../../shared/ConfirmModal";
 import { showUndoToast } from "../../shared/UndoToast";
 
+const getDisplayFileName = (value) => {
+  if (!value) return "Document Attachment";
+  const rawName = value.split('/').pop();
+  const match = rawName.match(/^\d+-\d+-(.+)$/);
+  if (match && match[1]) {
+    return match[1];
+  }
+  return rawName.replace(/^\d+-/, '');
+};
+
 export const LessonLayout = () => {
   const { t } = useTranslation();
   const { courseid, lessonid } = useParams();
@@ -42,48 +52,76 @@ export const LessonLayout = () => {
 
   const goBack = () => navigate(listPath, { replace: true });
 
-  useEffect(() => {
-    const fetchLessonDetail = async () => {
-      if (!lessonid || lessonid === "new") {
-        setBlocks([{ id: Date.now(), type: 'text', value: '', file: null }]);
-        setLoading(false);
-        setIsEditMode(true);
-        return;
-      }
+  const fetchLessonDetail = React.useCallback(async () => {
+    if (!lessonid || lessonid === "new") {
+      setBlocks([{ id: Date.now(), type: 'text', value: '', file: null }]);
+      setLoading(false);
+      setIsEditMode(true);
+      return;
+    }
 
-      try {
-        const res = await api.get(`courses/lessons/detail/${lessonid}`);
-        const lesson = res.data;
-        setTitle(lesson.title);
-        
-        const contentData = typeof lesson.content === 'string' ? JSON.parse(lesson.content) : lesson.content;
-        const loadedBlocks = contentData.map((b, index) => ({
-          id: index,
-          type: b.type,
-          value: typeof b.value === 'object' ? JSON.stringify(b.value) : b.value,
-          file: null
-        }));
-        
-        setBlocks(loadedBlocks);
-      } catch (error) {
-        toast.error("Failed to load lesson content");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchLessonDetail();
+    try {
+      const res = await api.get(`courses/lessons/detail/${lessonid}`);
+      const lesson = res.data;
+      setTitle(lesson.title);
+      
+      const contentData = typeof lesson.content === 'string' ? JSON.parse(lesson.content) : lesson.content;
+      const loadedBlocks = contentData.map((b, index) => ({
+        id: index,
+        type: b.type,
+        value: typeof b.value === 'object' ? JSON.stringify(b.value) : b.value,
+        file: null
+      }));
+      
+      setBlocks(loadedBlocks);
+    } catch (error) {
+      toast.error("Failed to load lesson content");
+    } finally {
+      setLoading(false);
+    }
   }, [lessonid]);
+
+  useEffect(() => {
+    fetchLessonDetail();
+  }, [fetchLessonDetail]);
+
+  const blocksRef = React.useRef(blocks);
+  React.useEffect(() => {
+    blocksRef.current = blocks;
+  }, [blocks]);
+
+  React.useEffect(() => {
+    return () => {
+      blocksRef.current.forEach(b => {
+        if (b.previewUrl) {
+          URL.revokeObjectURL(b.previewUrl);
+        }
+      });
+    };
+  }, []);
 
   const addBlock = (type) => {
     setBlocks([...blocks, { id: Date.now(), type, value: '', file: null }]);
   };
 
   const updateBlock = (id, newValue, file = null) => {
-    setBlocks(blocks.map(b => b.id === id ? { ...b, value: newValue, file } : b));
+    setBlocks(blocks.map(b => {
+      if (b.id === id) {
+        if (b.previewUrl) {
+          URL.revokeObjectURL(b.previewUrl);
+        }
+        const previewUrl = file ? URL.createObjectURL(file) : null;
+        return { ...b, value: newValue, file, previewUrl };
+      }
+      return b;
+    }));
   };
 
   const deleteBlock = (id) => {
+    const blockToDelete = blocks.find(b => b.id === id);
+    if (blockToDelete && blockToDelete.previewUrl) {
+      URL.revokeObjectURL(blockToDelete.previewUrl);
+    }
     setBlocks(blocks.filter(b => b.id !== id));
   };
 
@@ -125,6 +163,8 @@ export const LessonLayout = () => {
       
       if (lessonid === "new") {
          navigate(listPath, { replace: true });
+      } else {
+         await fetchLessonDetail();
       }
     } catch (error) {
       console.error("Save Error Details:", error.response?.data || error);
@@ -174,8 +214,7 @@ export const LessonLayout = () => {
         <div className="absolute top-0 right-0 w-80 h-80 bg-[var(--accent-primary)] opacity-[0.02] rounded-full -mr-40 -mt-40 pointer-events-none transition-transform group-hover:scale-110" />
         
         <div className="relative z-10 space-y-16">
-          {/* Header Actions */}
-          <header className="flex items-center justify-between glass-nav p-4 rounded-3xl sticky top-28 z-30 shadow-xl border border-[var(--border-color)]">
+          <div className="flex justify-start">
             <button 
               onClick={goBack} 
               className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-[var(--bg-primary)]/40 border border-[var(--border-color)] text-[var(--text-secondary)] font-black text-[10px] uppercase tracking-widest hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] transition-all active:scale-95"
@@ -183,7 +222,10 @@ export const LessonLayout = () => {
                <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
                Back to Course
             </button>
-            
+          </div>
+
+          {/* Header Actions */}
+          <header className="flex items-center justify-end glass-nav p-4 rounded-3xl sticky top-28 z-30 shadow-xl border border-[var(--border-color)]">
             <div className="flex items-center gap-4">
               {!isEditMode && lessonid !== 'new' && (user?.role === 'admin' || user?.role === 'instructor') && (
                 <button 
@@ -272,14 +314,22 @@ export const LessonLayout = () => {
                       <div className="space-y-6">
                         {isEditMode ? (
                           <div className="bg-[var(--bg-primary)]/30 border-2 border-dashed border-[var(--border-color)] rounded-[3rem] p-16 flex flex-col items-center justify-center gap-6 transition-all hover:border-[var(--accent-primary)]/50 hover:bg-[var(--bg-primary)]/40 group/media shadow-inner">
-                            {block.value && (
+                            {(block.value || block.previewUrl) && (
                               <div className="relative max-w-sm rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-[var(--bg-primary)] group-hover/media:scale-[1.02] transition-transform duration-500">
-                                {block.type === 'video' ? 
-                                  <div className="bg-slate-900 aspect-video flex items-center justify-center text-[var(--bg-primary)]"><Video className="h-12 w-12 opacity-40" /></div> : 
-                                  block.type === 'image' ?
-                                  <img src={`${import.meta.env.VITE_API_URL}${block.value}`} className="w-full h-auto" /> :
-                                  <div className="bg-[var(--bg-secondary)] aspect-square flex items-center justify-center text-[var(--text-primary)] px-8"><FileText className="h-12 w-12 opacity-40" /></div>
-                                }
+                                {block.type === 'video' ? (
+                                  block.previewUrl ? (
+                                    <video src={block.previewUrl} controls className="w-full h-auto bg-black aspect-video object-cover" />
+                                  ) : (
+                                    <div className="bg-slate-900 aspect-video flex items-center justify-center text-[var(--bg-primary)]"><Video className="h-12 w-12 opacity-40" /></div>
+                                  )
+                                ) : block.type === 'image' ? (
+                                  <img src={block.previewUrl || `${import.meta.env.VITE_API_URL}${block.value}`} className="w-full h-auto" />
+                                ) : (
+                                  <div className="bg-[var(--bg-secondary)] aspect-square flex items-center justify-center text-[var(--text-primary)] px-8 flex-col gap-2">
+                                    <FileText className="h-12 w-12 opacity-40" />
+                                    <span className="text-[10px] font-bold block truncate max-w-full text-center">{block.file ? block.file.name : getDisplayFileName(block.value)}</span>
+                                  </div>
+                                )}
                                 <div className="absolute inset-0 bg-[var(--text-primary)]/60 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover/media:opacity-100 transition-opacity text-center p-4">
                                   <p className="text-[var(--bg-primary)] font-black text-[10px] uppercase tracking-widest bg-[var(--text-primary)]/60 px-6 py-2 rounded-full border border-[var(--bg-primary)]/20">Replace {block.type}</p>
                                 </div>
@@ -314,7 +364,7 @@ export const LessonLayout = () => {
                                     <FileText className="h-10 w-10" />
                                   </div>
                                   <div className="space-y-1">
-                                    <p className="text-lg font-black text-[var(--text-primary)] uppercase tracking-widest">Document Attachment</p>
+                                    <p className="text-lg font-black text-[var(--text-primary)] uppercase tracking-widest">{getDisplayFileName(block.value)}</p>
                                     <p className="text-xs text-[var(--text-secondary)] font-medium">Click to download resource</p>
                                   </div>
                                 </div>

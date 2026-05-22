@@ -7,9 +7,11 @@ import { ArrowLeft, CheckCircle, FileText, Upload, Clock, GraduationCap, X, Chev
 import { DataCard } from "../../components/shared/DataCard";
 import MobileListItem from "../../components/shared/MobileListItem";
 import { useTranslation } from '../../hooks/useTranslation';
+import useThemeStore from '../../stores/useThemeStore';
 
 export const AssignmentDetail = () => {
     const { t } = useTranslation();
+    const { theme } = useThemeStore();
     const { assignment_id } = useParams();
     const { user } = useAuthStore();
     const navigate = useNavigate();
@@ -221,9 +223,9 @@ export const AssignmentDetail = () => {
                         {mySubmission?.status === 'graded' ? (
                             <div className="insta-card p-10 bg-[var(--accent-primary)] border-none relative overflow-hidden group shadow-xl">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32" />
-                                <div className="relative z-10 flex flex-col md:flex-row gap-10 items-start md:items-center text-white">
+                                <div className={`relative z-10 flex flex-col md:flex-row gap-10 items-start md:items-center ${theme === 'light' ? 'text-black' : 'text-white'}`}>
                                     <div className="flex-1 space-y-6">
-                                        <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/10 w-fit text-[10px] font-extrabold tracking-widest uppercase">
+                                        <div className={`flex items-center gap-3 px-4 py-2 rounded-full w-fit text-[10px] font-extrabold tracking-widest uppercase ${theme === 'light' ? 'bg-black/10' : 'bg-white/10'}`}>
                                             <CheckCircle className="h-3 w-3" /> {t('assign_eval_complete')}
                                         </div>
                                         <div className="flex items-baseline gap-4">
@@ -234,7 +236,7 @@ export const AssignmentDetail = () => {
                                         </div>
                                         <div className="space-y-3">
                                             <span className="text-[10px] font-extrabold uppercase tracking-widest opacity-60">{t('label_feedback')}</span>
-                                            <p className="text-lg font-medium italic leading-relaxed border-l-2 border-white/30 pl-6">
+                                            <p className={`text-lg font-medium italic leading-relaxed border-l-2 pl-6 ${theme === 'light' ? 'border-black/30' : 'border-white/30'}`}>
                                                 "{mySubmission.feedback || t('assign_def_feedback')}"
                                             </p>
                                         </div>

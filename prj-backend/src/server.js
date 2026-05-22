@@ -21,7 +21,7 @@ const path = require('path');
 ensureDirs();
 
 const app = express()
-const PORT = 5001
+const PORT = process.env.PORT || 5001
 
 app.use((req, res, next) => {
     console.log(`[${req.method}] ${req.originalUrl}`);

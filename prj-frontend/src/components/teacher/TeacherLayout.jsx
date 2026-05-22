@@ -170,7 +170,7 @@ export const TeacherLayout = () => {
                     `}
                 >
                     {/* Global Top Navbar for Desktop - Moved out for full width */}
-                    <header className="h-24 glass-nav fixed top-0 left-0 w-full z-[120] px-8 sm:px-12 hidden lg:flex items-center justify-between">
+                    <header className="h-24 bg-[var(--bg-primary)] border-b border-[var(--border-color)]/50 fixed top-0 left-0 w-full z-[120] px-8 sm:px-12 hidden lg:flex items-center justify-between">
                         {/* Brand / Logo Space (Dynamic width to balance sidebar) */}
                         <Link 
                             to="/teacher"

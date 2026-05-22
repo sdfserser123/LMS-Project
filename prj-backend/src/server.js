@@ -16,6 +16,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const { ensureDirs } = require('./libs/ensureDirs');
 require("dotenv").config()
+process.env.ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'default_fallback_jwt_secret_token_123456_lms';
 const path = require('path');
 
 ensureDirs();

@@ -51,4 +51,21 @@ api.interceptors.response.use((res) => res, async (error) => {
     }
 
     return Promise.reject(error);
-})
+});
+
+export const getFileUrl = (url) => {
+    if (!url) return "";
+    const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:5001";
+    
+    // If it's already a full URL that points to localhost:5001, replace it with the configured backend URL
+    if (url.startsWith("http://localhost:5001")) {
+        return url.replace("http://localhost:5001", backendUrl);
+    }
+    
+    // If it's a relative path, prepend the backend URL
+    if (url.startsWith("/")) {
+        return `${backendUrl}${url}`;
+    }
+    
+    return url;
+};

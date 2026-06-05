@@ -13,7 +13,7 @@ import {
     AlertCircle,
     Loader2
 } from 'lucide-react';
-import { api } from '../../lib/axios';
+import { api, getFileUrl } from '../../lib/axios';
 
 /**
  * StudentDossierModal - Premium monochrome student profile view.
@@ -155,7 +155,7 @@ const StudentDossierModal = ({ isOpen, onClose, studentId }) => {
                                                                     Evidence Uploaded
                                                                 </span>
                                                                 <a 
-                                                                    href={a.file_url} 
+                                                                    href={getFileUrl(a.file_url)} 
                                                                     target="_blank" 
                                                                     rel="noopener noreferrer"
                                                                     className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 hover:underline"

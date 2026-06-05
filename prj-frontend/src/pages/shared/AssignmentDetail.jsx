@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from '../../lib/axios';
+import { api, getFileUrl } from '../../lib/axios';
 import { useAuthStore } from '../../stores/userAuthStore';
 import { toast } from 'sonner';
 import { ArrowLeft, CheckCircle, FileText, Upload, Clock, GraduationCap, X, ChevronRight, File, Loader2, User, Mail, Star } from 'lucide-react';
@@ -197,7 +197,7 @@ export const AssignmentDetail = () => {
                                     </div>
                                 </div>
                                 <a 
-                                    href={assignment.file_url} 
+                                    href={getFileUrl(assignment.file_url)} 
                                     target="_blank" 
                                     rel="noreferrer" 
                                     className="btn-primary !px-10 !py-5"
@@ -243,7 +243,7 @@ export const AssignmentDetail = () => {
                                     </div>
                                     {mySubmission.file_url && (
                                         <a 
-                                            href={mySubmission.file_url} 
+                                            href={getFileUrl(mySubmission.file_url)} 
                                             target="_blank" 
                                             rel="noreferrer" 
                                             className="px-10 py-5 rounded-2xl bg-white text-[var(--accent-primary)] font-extrabold text-[10px] uppercase tracking-widest transition-all shadow-2xl active:scale-95 flex items-center gap-3 hover:translate-y-[-4px]"
@@ -268,7 +268,7 @@ export const AssignmentDetail = () => {
                                 </div>
                                 {mySubmission.file_url && (
                                     <a 
-                                        href={mySubmission.file_url} 
+                                        href={getFileUrl(mySubmission.file_url)} 
                                         target="_blank" 
                                         rel="noreferrer" 
                                         className="btn-secondary !bg-amber-500 !text-white active:scale-95"
@@ -543,7 +543,7 @@ export const AssignmentDetail = () => {
                                     {gradingTarget.file_url && (
                                         <div className="mt-10 pt-10 border-t border-[var(--surface-high)]">
                                             <a 
-                                                href={gradingTarget.file_url} 
+                                                href={getFileUrl(gradingTarget.file_url)} 
                                                 target="_blank" 
                                                 rel="noreferrer" 
                                                 className="btn-primary"

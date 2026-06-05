@@ -24,9 +24,7 @@ const assignmentController = {
             // Handle file upload safely
             let finalFileUrl = "";
             if (req.file) {
-                // Ensure external access uses the correct static host
-                const host = process.env.API_URL || "http://localhost:5001";
-                finalFileUrl = `${host}/uploads/assignments/${req.file.filename}`;
+                finalFileUrl = `/uploads/assignments/${req.file.filename}`;
             }
 
             const id = await Assignment.create(course_id, title, description, due_date, finalFileUrl, type);
@@ -190,8 +188,7 @@ const assignmentController = {
             // Handle file upload safely
             let finalFileUrl = file_url || "";
             if (req.file) {
-                const host = process.env.API_URL || "http://localhost:5001";
-                finalFileUrl = `${host}/uploads/submissions/${req.file.filename}`;
+                finalFileUrl = `/uploads/submissions/${req.file.filename}`;
             }
 
             const submissionId = await Assignment.submit(assignment_id, student_id, content || "", finalFileUrl);

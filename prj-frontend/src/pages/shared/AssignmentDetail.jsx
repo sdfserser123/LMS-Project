@@ -200,6 +200,7 @@ export const AssignmentDetail = () => {
                                     href={getFileUrl(assignment.file_url)} 
                                     target="_blank" 
                                     rel="noreferrer" 
+                                    download
                                     className="btn-primary !px-10 !py-5"
                                 >
                                     <Upload className="h-4 w-4 mr-2 rotate-180" /> 
@@ -246,6 +247,7 @@ export const AssignmentDetail = () => {
                                             href={getFileUrl(mySubmission.file_url)} 
                                             target="_blank" 
                                             rel="noreferrer" 
+                                            download
                                             className="px-10 py-5 rounded-2xl bg-white text-[var(--accent-primary)] font-extrabold text-[10px] uppercase tracking-widest transition-all shadow-2xl active:scale-95 flex items-center gap-3 hover:translate-y-[-4px]"
                                         >
                                             <File className="h-4 w-4" /> {t('assign_down_appendix')}
@@ -271,6 +273,7 @@ export const AssignmentDetail = () => {
                                         href={getFileUrl(mySubmission.file_url)} 
                                         target="_blank" 
                                         rel="noreferrer" 
+                                        download
                                         className="btn-secondary !bg-amber-500 !text-white active:scale-95"
                                     >
                                         <File className="h-4 w-4 mr-2" /> {t('assign_down_appendix')}
@@ -546,6 +549,7 @@ export const AssignmentDetail = () => {
                                                 href={getFileUrl(gradingTarget.file_url)} 
                                                 target="_blank" 
                                                 rel="noreferrer" 
+                                                download
                                                 className="btn-primary"
                                             >
                                                 <Upload className="h-4 w-4 mr-3" /> {t('assign_down_artifact')}

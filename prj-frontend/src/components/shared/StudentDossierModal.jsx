@@ -158,6 +158,7 @@ const StudentDossierModal = ({ isOpen, onClose, studentId }) => {
                                                                     href={getFileUrl(a.file_url)} 
                                                                     target="_blank" 
                                                                     rel="noopener noreferrer"
+                                                                    download
                                                                     className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 hover:underline"
                                                                 >
                                                                     <Download className="h-3.5 w-3.5" />

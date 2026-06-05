@@ -53,7 +53,16 @@ app.use(cors({
     credentials: true,
 }))
 
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
+    setHeaders: (res, filePath) => {
+        const ext = path.extname(filePath).toLowerCase();
+        const downloadExtensions = ['.docx', '.doc', '.pdf', '.xls', '.xlsx', '.ppt', '.pptx', '.zip', '.rar'];
+        if (downloadExtensions.includes(ext)) {
+            const baseName = path.basename(filePath);
+            res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(baseName)}"`);
+        }
+    }
+}));
 
 //public routes
 app.use('/api/auth', authRoute)
